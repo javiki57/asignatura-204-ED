@@ -45,3 +45,25 @@ p_ternas x y = x>0 && y>0 && x>y ==> esTerna l1 l2 h
 -- *** Gave up! Passed only 62 tests
 -- lo que indica que, aunque sólo se generaron 62 casos de pruebas con las condiciones precisas, todos estos los casos pasaron la prueba.
 
+-- 2. Define una función polimórfica
+-- intercambia :: (a,b) -> (b,a)
+--que intercambie de posición los datos de la tupla:
+--Main> intercambia (1,True)            Main> intercambia ('X','Y')
+--      (True,1)                        ('Y','X')
+
+intercambia :: (a,b) -> (b,a)
+intercambia (x,y) = (y,x)
+
+-- 3
+
+ordena2 :: Ord a => (a,a) -> (a,a)
+ordena2 (x,y) | x <= y = (x,y)
+              | x > y = (y,x)
+
+p1_ordena2 x y = enOrden (ordena2 (x,y))
+    where
+        enOrden (x,y) = x<=y
+
+p2_ordena2 x y = mismosElementos (x,y) (ordena2 (x,y))
+    where
+        mismosElementos (x,y)(z,v) = (x==z && y==v) || (x==v && y==z)
