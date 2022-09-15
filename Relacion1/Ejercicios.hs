@@ -67,3 +67,12 @@ p1_ordena2 x y = enOrden (ordena2 (x,y))
 p2_ordena2 x y = mismosElementos (x,y) (ordena2 (x,y))
     where
         mismosElementos (x,y)(z,v) = (x==z && y==v) || (x==v && y==z)
+
+
+--b)
+ordena3 :: Ord a => (a,a,a) -> (a,a,a)
+ordena3 (x,y,z) 
+                | y < x     = ordena3 (y,x,z)
+                | z < y     = ordena3 (x,z,y)
+                | z < x     = ordena3 (z,y,x)
+                | otherwise = (x,y,z)
