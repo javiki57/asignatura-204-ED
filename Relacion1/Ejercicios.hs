@@ -21,3 +21,13 @@
 esTerna :: Integer -> Integer -> Integer -> Bool
 esTerna x y z | x*x + y*y == z*z = True
               | otherwise = False
+
+-- b) Es fácil demostrar que para cualesquiera x e y enteros positivos con x>y, la terna (x^2 -y^2, 2xy, x^2 +y^2 ) es pitagórica.
+-- Usando esto, escribe una función terna que tome dos parámetros y devuelva una terna pitagórica. Por ejemplo:
+-- Main> terna 3 1
+-- (8,6,10)
+-- Main> esTerna 8 6 10
+-- True
+terna :: Integer -> Integer -> (Integer, Integer, Integer)
+terna x y | x > y = (x*x - y*y, 2*x*y, x*x + y*y)
+          | otherwise = error "x no es menor que y"
