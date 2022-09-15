@@ -76,3 +76,13 @@ ordena3 (x,y,z)
                 | z < y     = ordena3 (x,z,y)
                 | z < x     = ordena3 (z,y,x)
                 | otherwise = (x,y,z)
+
+
+p1_ordena3 x y z = enOrden (ordena3 (x,y,z))
+    where
+        enOrden (x,y,z) = x<=y && y<=z
+
+p2_ordena3 x y z = mismosElementos (x,y,z) (ordena3 (x,y,z))
+    where
+        mismosElementos (x,y,z) (t,v,w) = (x,y,z) == (t,v,w) || (x,y,z) == (v,t,w) || (x,y,z) == (v,w,t) || (x,y,z) == (t,w,v) || (x,y,z) == (w,v,t)
+
