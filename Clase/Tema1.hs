@@ -513,7 +513,7 @@ estáOrdenada (x,y) = x<=y
 
 inverso :: Double -> Double  -- predefinida como recip
 inverso x 
-         | x == 0 = error "división por cero"
+         | x == 0 = error "inverso: división por cero"
          |otherwise = 1/x
 
 -- | 12. Definiciones locales
