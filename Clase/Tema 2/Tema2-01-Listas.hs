@@ -135,7 +135,7 @@ hasta10 = [1,2,3,4,5,6,7,8,9,10]
 -- [10,9,8,7,6,5,4,3,2,1,0]
 
 cuentaAtrás :: [Int]
-cuentaAtrás = undefined
+cuentaAtrás = [10,9..0]
 
 {-
    El tipo Char también se puede utilizar en progresiones aritméticas.
@@ -146,7 +146,7 @@ cuentaAtrás = undefined
 -- "abcdefghijklmnopqrstuvwxyz"
 
 alfabeto :: String
-alfabeto = undefined
+alfabeto = ['a'..'z']
 
 {-
    Como en Matemáticas, las progresiones aritméticas pueden ser infinitas: basta
@@ -456,14 +456,16 @@ suma (x:xs) = x + suma xs    -- caso recursivo
 -- 7
 
 longitud :: [a] -> Integer -- predefinida como length
-longitud = undefined
+longitud [] = 0
+longitud (x:xs) = 1 + longitud xs
 
 -- |
 -- >>> inversa "abc"
 -- "cba"
 
 inversa :: [a] -> [a] -- predefinida como reverse
-inversa = undefined
+inversa [] = []
+inversa (x:xs) = inversa xs ++ [x]
 
 -- |
 -- >>> ordenada [-6, 4, 17]
@@ -473,8 +475,9 @@ inversa = undefined
 -- False
 
 ordenada :: Ord a => [a] -> Bool
-ordenada = undefined
-
+ordenada [] = True
+ordenada [_] = True
+ordenada (x:y:xs) = [x] <= [y] && ordenada (y:xs)
 {-
 
    * 6.3 Definición de funciones recursivas sobre listas
