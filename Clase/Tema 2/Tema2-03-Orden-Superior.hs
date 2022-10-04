@@ -238,21 +238,21 @@ cubosConLambda xs = map (\ x -> x * x * x) xs
 -- [2,4,6,8,10]
 
 duplica :: [Int] -> [Int]
-duplica xs = undefined
+duplica xs = map (\x -> x * 2) xs
 
 -- |
 -- >>> sigChar "Haskell"
 --- "Ibtlfmm"
 
 sigChar :: String -> String
-sigChar xs = undefined
+sigChar xs = map (\x -> chr (ord x + 1)) xs
 
 -- |
 -- >>> múltiplosDeTres [1,2,3,4,5,6,7,8,9,10,12]
 -- [3,6,9,12]
 
 múltiplosDeTres :: [Int] -> [Int]
-múltiplosDeTres xs = undefined
+múltiplosDeTres xs = filter (\x -> x `mod` 3 == 0) xs
 
 -- | 12. Secciones
 ------------------------------------------------------------
