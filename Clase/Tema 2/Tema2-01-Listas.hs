@@ -678,11 +678,17 @@ suma' xs = sumaAc xs 0
 -- 7
 
 longitud' :: [a] -> Int -- predefinida como length
-longitud' = undefined
+longitud' xs = longitudAc xs 0
+   where
+      longitudAc [] ac     = ac
+      longitudAc (_:xs) ac = longitudAc xs (ac+1)
 
 -- |
 -- >>> inversa' "abc"
 -- "cba"
 
 inversa' :: [a] -> [a] -- predefinida como reverse
-inversa' = undefined
+inversa' xs = invAc xs []
+   where
+      invAc [] ac = ac
+      invAc (x:xs) ac = invAc xs (x:ac)
