@@ -288,14 +288,14 @@ múltiplosDeTres xs = filter (\x -> x `mod` 3 == 0) xs
 
 
 cubosConSeccion :: [Integer] -> [Integer]
-cubosConSeccion xs = undefined
+cubosConSeccion xs = map (^3) xs
 
 -- |
 -- >>> duplicaConSeccion [1..5]
 -- [2,4,6,8,10]
 
 duplicaConSeccion :: [Int] -> [Int]
-duplicaConSeccion xs = undefined
+duplicaConSeccion xs = map (*2) xs
 
 -- | 13. Parcialización
 ------------------------------------------------------------
@@ -329,7 +329,7 @@ g = f 1 2 -- versión especializada de f: g z = 1 + 2*2 + 3*z
 -- [5.0,8.5,5.0,7.25,9.1,6.0,10.0]
 
 apruébame :: [Double] -> [Double]
-apruébame xs = undefined
+apruébame xs = map (max 5) xs
 
 -- | 14. Composición de funciones
 ------------------------------------------------------------
@@ -379,7 +379,7 @@ logTotal' x = (log . abs) x -- mediante composición de funciones
 -- >>> nextChar 'a'
 -- 'b'
 nextChar :: Char -> Char
-nextChar x = undefined
+nextChar x = (chr . (+1) . ord) x   -- Por composición
 
 {-
    Ejemplo de composición de funciones:
