@@ -79,7 +79,8 @@ producto (x:xs) =  x * producto xs
 -- >>> conjunción [True, 1 < 2, 'a' == 'b']
 -- False
 conjunción :: [Bool] -> Bool -- predefinida como and
-conjunción = undefined
+conjunción [] = True
+conjunción (x:xs) = x && (conjunción xs)
 
 -- |
 -- >>> aplana [ [1,2], [3], [], [4,5,6]]
@@ -100,8 +101,11 @@ aplana (xs:xss) =  xs ++ aplana xss
        la cabeza `x` a la solución de la cola
 -}
 
-plegar :: untyped -- predefinida como foldr
-plegar = undefined
+plegar :: ( a -> b -> b ) -> b -> [a] -> b -- predefinida como foldr
+plegar f solBase xs = recLista xs
+  where
+    recLista []     = solBase
+    recLista (x:xs) = f x (recLista xs) 
 
 -- Todas las funciones anteriores pueden definirse mediante 'foldr'
 
@@ -109,13 +113,13 @@ plegar = undefined
 -- >>> sumaR [1,2,3,4,5]
 -- 15
 sumaR :: [Int] -> Int -- predefinida como sum
-sumaR xs = undefined
+sumaR xs = foldr (+) 0 xs
 
 -- |
 -- >>> productoR [1,2,3,4,5]
 -- 120
 productoR :: [Int] -> Int -- predefinida como product
-productoR xs = undefined
+productoR xs = foldr (*) 1 xs
 
 -- |
 -- >>> conjunciónR [True, 1 < 2, 'a' == 'a']
@@ -123,13 +127,13 @@ productoR xs = undefined
 -- >>> conjunciónR [True, 1 < 2, 'a' == 'b']
 -- False
 conjunciónR :: [Bool] -> Bool -- predefinida como and
-conjunciónR xs = undefined
+conjunciónR xs = foldr (&&) True xs
 
 -- |
 -- >>> aplanaR [ [1,2], [3], [], [4,5,6]]
 -- [1,2,3,4,5,6]
 aplanaR :: [[a]] -> [a]  -- predefinida como concat
-aplanaR xs = undefined
+aplanaR xs = foldr (++) [] xs
 
 {-
    A veces la función que "añade" la cabeza a la solución de la cola
@@ -267,7 +271,7 @@ conjunciónL xs = undefined
 -- >>> longitud "haskell"
 -- 7
 longitud :: [a] -> Integer -- predefinida como length
-longitud xs = undefined
+longitud xs = foldr (\x n -> n+1) 0 xs
 
 -- Una cadena es una palabra si está formada solo por letras.
 
@@ -277,7 +281,9 @@ longitud xs = undefined
 -- >>> esPalabra "haskell2015"
 -- False
 esPalabra :: String -> Bool
-esPalabra xs = undefined
+esPalabra xs = foldr f True xs
+    where
+      f cabeza solCola = isLetter cabeza && solCola
 
 -- |
 -- >>> todasMayúsculas "Haskell"
@@ -295,7 +301,12 @@ pares xs = undefined
 -- >> apariciones 'a' "Abracadabra"
 -- 4
 apariciones :: Eq a => a -> [a] -> Integer
-apariciones x xs = undefined
+apariciones x xs = foldr f 0 xs
+    where
+      f cabeza solCola
+            | cabeza == x = solCola +1
+            | otherwise   = solCola
+
 
 -- Purgar una lista es quitar las repeticiones.
 
