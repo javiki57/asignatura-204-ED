@@ -15,8 +15,10 @@ import           Test.QuickCheck
 -------------------------------------------------------------------------------
 
 distintos :: Eq a => [a] -> Bool
-distintos = undefined
-
+distintos [] = True
+distintos (x:xs)
+            | x `elem` xs = False
+            | otherwise   = distintos xs
 -------------------------------------------------------------------------------
 -- Ejercicio 3 - reparte
 -------------------------------------------------------------------------------
