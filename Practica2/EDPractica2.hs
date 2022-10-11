@@ -24,7 +24,11 @@ distintos (x:xs)
 -------------------------------------------------------------------------------
 
 reparte :: [a] -> ([a], [a])
-reparte = undefined
+reparte [] = ([],[])
+reparte [x] = ([x],[])
+reparte (x:y:res) = (x:xs,y:ys)
+    where
+        (xs,ys) = reparte res
 
 -------------------------------------------------------------------------------
 -- Ejercicio [empareja] de la lista de ejercicios extra
@@ -34,7 +38,8 @@ reparte = undefined
 -- Usa Hoogle para encontrar información sobre la función 'zip'.
 
 empareja :: [a] -> [b] -> [(a, b)] -- predefinida como zip
-empareja xs ys = undefined
+empareja (x:xs) (y:ys) = (x,y) : empareja xs ys
+empareja _ _ = [] 
 
 prop_empareja_OK :: (Eq b, Eq a) => [a] -> [b] -> Bool
 prop_empareja_OK xs ys = undefined
@@ -55,12 +60,20 @@ desconocida xs = and [ x <= y | (x, y) <- zip xs (tail xs) ]
 -- Usa Hoogle para consultar las funciones 'takeWhile' y 'dropWhile'.
 
 -- 14.a - usando takeWhile y dropWhile
-inserta :: untyped
-inserta = undefined
+inserta ::(Ord a) => a -> [a] -> [a]
+inserta x xs = l1 ++ [x] ++ l2
+    where
+        l1 = takeWhile (<=x) xs
+        l2 = dropWhile (<=x) xs
 
 -- 14.b - mediante recursividad
-insertaRec :: untyped
-insertaRec = undefined
+insertaRec :: (Ord a) => a -> [a] -> [a]
+insertaRec x [] = [x]
+insertaRec x xs
+            | x <= l = x:xs
+            | x > l  = l : insertaRec x ls
+    where
+        (l:ls) = xs
 
 -- 14.c
 
@@ -68,29 +81,32 @@ insertaRec = undefined
 -- anteriores. Cuando los completes, elimina los guiones del comentario
 -- y comprueba tus funciones.
 
--- prop_inserta :: Ord a => a -> [a] -> Property
--- prop_inserta x xs = desconocida xs ==> desconocida (inserta x xs)
+ --prop_inserta :: Ord a => a -> [a] -> Property
+ --prop_inserta x xs = desconocida xs ==> desconocida (inserta x xs)
 
--- prop_insertaRec :: Ord a => a -> [a] -> Property
--- prop_insertaRec x xs = desconocida xs ==> desconocida (insertaRec x xs)
+ --prop_insertaRec :: Ord a => a -> [a] -> Property
+ --prop_insertaRec x xs = desconocida xs ==> desconocida (insertaRec x xs)
 
 -- 14.e - usando foldr
-ordena :: untyped
-ordena = undefined
+ordena :: (Ord a) => [a] -> [a]
+ordena xs = foldr inserta [] xs
+
 
 -- Para definir prop_ordena_OK tendrás que usar el operador sobre listas (\\).
 -- Consulta Hoogle.
 
 -- 14.f
-prop_ordena_OK :: untyped
-prop_ordena_OK = undefined
-
+prop_ordena_OK xs = undefined
 -------------------------------------------------------------------------------
 -- Ejercicio [mezcla] de la lista de ejercicios extra
 -------------------------------------------------------------------------------
 
 mezcla :: Ord a => [a] -> [a] -> [a]
-mezcla  ys = undefined
+mezcla [] ys = ys
+mezcla xs [] = xs
+mezcla (x:xs) (y:ys)
+        | x <= y    = x : (mezcla xs (y:ys))
+        | otherwise = y : (mezcla ys (x:xs)) 
 
 -------------------------------------------------------------------------------
 -- Ejercicio [pares] de la lista de ejercicios extra
@@ -100,16 +116,25 @@ cotizacion :: [(String, Double)]
 cotizacion = [("apple", 116), ("intel", 35), ("google", 824), ("nvidia", 67)]
 
 buscarRec :: Eq a => a -> [(a,b)] -> [b]
-buscarRec x ys = undefined
+buscarRec _ [] = []
+buscarRec x (y:ys)
+            | x == fst y = [snd y]
+            | otherwise  = buscarRec x ys
+
 
 buscarC :: Eq a => a -> [(a, b)] -> [b]
-buscarC x ys = undefined
+buscarC x [] = []
+buscarC x xs = [head [snd y | y <- xs, fst y==x]]
 
 buscarP :: Eq a => a -> [(a, b)] -> [b]
-buscarP x ys = undefined
+buscarP x ys = foldr f [] ys
+    where
+        f cab solCola
+                | x == fst cab = [snd cab]
+                | otherwise    = solCola
 
 prop_buscar_OK :: (Eq a, Eq b) => a -> [(a, b)] -> Bool
-prop_buscar_OK x ys = undefined
+prop_buscar_OK x ys = buscarC x ys == buscarP x ys
 
 {-
 
@@ -122,14 +147,16 @@ Realiza las modificaciones necesarias para que se verifique la propiedad.
 -}
 
 valorCartera :: [(String, Double)] -> [(String, Double)] -> Double
-valorCartera cartera mercado = undefined
+valorCartera cartera mercado = sum (map (maped) [fst y | y <- cartera])
+    where
+        maped = \x -> head (buscarP x mercado) * head [snd z | z <- cartera, fst z == x]
 
 -------------------------------------------------------------------------------
 -- Ejercicio 12 - concat
 -------------------------------------------------------------------------------
 
 concatP :: [[a]] -> [a]
-concatP xss = undefined
+concatP xss = foldr (++) [] xss
 
 concatC :: [[a]] -> [a]
 concatC xss = undefined
