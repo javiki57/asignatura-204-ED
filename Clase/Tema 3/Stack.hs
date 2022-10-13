@@ -10,7 +10,7 @@
 -- Implementación del TAD Pila
 ------------------------------------------------------------
 
-module Stack(Stack, --Lista de exportación, lo que esta es publico y lo que no es privado.
+module Stack (Stack, --Lista de exportación, lo que esta es publico y lo que no es privado.
             empty,
             push,
             top,

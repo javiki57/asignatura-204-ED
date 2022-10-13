@@ -71,4 +71,6 @@ size s
 -- >>> stack2List pila1
 -- [2,5,7,11]
 stack2List :: Stack a -> [a]
-stack2List s = undefined
+stack2List s
+      | isEmpty s = []
+      | otherwise = stack2List (pop s)
