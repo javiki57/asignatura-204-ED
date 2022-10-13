@@ -105,7 +105,7 @@ push x s = Node x s
 -- Node "mary" (Node "john" Empty)
 pop :: Stack a -> Stack a
 pop Empty = error "pop: pila vacía"
-pop (Node x s) = s
+pop (Node _ s) = s
 
 -- Complejidad: O(1)
 -- |
@@ -113,7 +113,7 @@ pop (Node x s) = s
 -- "peter"
 top :: Stack a -> a
 top Empty= error "pop: pila vacía"
-top (Node x s) = x
+top (Node x _) = x
 
 -- Complejidad: O(1)
 -- |
@@ -124,7 +124,7 @@ top (Node x s) = x
 -- False
 isEmpty :: Stack a -> Bool
 isEmpty Empty = True
-isEmpty (Node x s ) = False
+isEmpty _ = False
 
 {-
    La siguiente instancia de `Arbitrary` es para enseñar a QuickCheck
