@@ -10,7 +10,12 @@
 -- Implementación del TAD Pila
 ------------------------------------------------------------
 
-module Stack where
+module Stack(Stack, --Lista de exportación, lo que esta es publico y lo que no es privado.
+            empty,
+            push,
+            top,
+            pop,
+            isEmpty) where
 
 import           Test.QuickCheck
 
