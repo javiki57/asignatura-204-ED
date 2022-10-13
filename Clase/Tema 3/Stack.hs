@@ -75,43 +75,47 @@ import           Test.QuickCheck
 -- El tipo algebraico `Stack a` es la representación física de la pila.
 -- Esta representación debería estar **oculta** para que el tipo `Stack a` sea un TAD.
 
-data Stack a = Undefined
+data Stack a = Empty -- vacia :: Stack a
+            | Node a (Stack a)  -- "a" cima seguida de pila "Stack a"
+            deriving Show
 
 -- Ejercicio: representa una pila `customers` en la que aparezcan de la cima
 -- a la base los elementos "peter", "mary" y "john".
 
 customers :: Stack String
-customers = undefined
+customers = Node "peter" (Node "mary" (Node "john" Empty))
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> empty
 -- Empty
 empty :: Stack a
-empty = undefined
+empty = Empty
 
 -- Complejidad: O(?)
 -- |
 -- | push "frank" customers
 -- Node "frank" (Node "peter" (Node "mary" (Node "john" Empty)))
 push :: a -> Stack a -> Stack a
-push = undefined
+push x s = Node x s
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> pop customers
 -- Node "mary" (Node "john" Empty)
 pop :: Stack a -> Stack a
-pop = undefined
+pop Empty = error "pop: pila vacía"
+pop (Node x s) = s
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> top customers
 -- "peter"
 top :: Stack a -> a
-top = undefined
+top Empty= error "pop: pila vacía"
+top (Node x s) = x
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> isEmpty empty
 -- True
@@ -119,7 +123,8 @@ top = undefined
 -- isEmpty customers
 -- False
 isEmpty :: Stack a -> Bool
-isEmpty = undefined
+isEmpty Empty = True
+isEmpty (Node x s ) = False
 
 {-
    La siguiente instancia de `Arbitrary` es para enseñar a QuickCheck
