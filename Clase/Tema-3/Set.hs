@@ -162,14 +162,18 @@ isEmpty :: Set a -> Bool
 isEmpty Empty = True
 isEmpty _     = False
 
--- complejidad: O(?)
+-- complejidad: O(n)
 -- |
 -- >>> isElem 'x' sample
 -- False
 -- >>> isElem 'f' sample
 -- True
 isElem :: Ord a => a -> Set a -> Bool
-isElem = undefined
+isElem x Empty = False
+isElem x (Node y s)
+     | x < y = False
+     | x == y = True
+     | otherwise = isElem x s
 
 -- complejidad: O(?)
 -- |
@@ -178,7 +182,11 @@ isElem = undefined
 -- >>> insert 'a' sample
 -- Node 'a' (Node 'c' (Node 'f' (Node 'z' Empty)))
 insert :: Ord a => a -> Set a -> Set a
-insert = undefined
+insert x Empty = Node x Empty
+insert x (Node y s)
+          | x < y    = Node x (Node y s) 
+          | x == y   = Node y s
+          |otherwise = Node y (insert x s)
 
 -- complejidad: O(?)
 -- |
