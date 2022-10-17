@@ -51,4 +51,6 @@ list2Queue xs = foldr Q.enqueue Q.empty (reverse xs)
 -- >>> queue2List queue1
 -- ["Haskell","Java","C++"]
 queue2List :: Q.Queue a -> [a]
-queue2List = undefined
+queue2List q
+      | Q.isEmpty q = []
+      | otherwise = Q.first q : queue2List (Q.dequeue q)
