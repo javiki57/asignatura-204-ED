@@ -49,12 +49,14 @@ import           Test.QuickCheck
 
    Los axiomas que definen el TAD Cola son los siguientes:
 
-         isEmpty empty = ???
-         isEmpty (enqueue x q) = ???
+         isEmpty empty         = True
+         isEmpty (enqueue x q) = False
 
-         first (enqueue x q) = ???
+         first (enqueue x q)     = first q, q/= empty
+         first (enqueue x empty) = x
 
-         dequeue (enqueue x q) = ???
+         dequeue (enqueue x empty) = empty
+         dequeue (enqueue x q)     = enqueue x (dequeue q), q /= empty 
 
    ¿Qué implican los axiomas sobre `first` y `dequeue`?
 

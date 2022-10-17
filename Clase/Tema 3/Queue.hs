@@ -53,41 +53,45 @@ import           Test.QuickCheck
 -- El tipo algebraico `Queue a` es la representación física de la cola.
 -- Esta representación está **oculta** para que el tipo `Queue a` sea un TAD.
 
-data Queue a = Undefined
+data Queue a = Empty
+               | Node a (Queue a)
              deriving (Eq, Show)
 
 -- Ejercicio: representa una cola `customers` en la que aparezcan del
 -- primero al último los elementos "peter", "mary" y "john".
 
 customers :: Queue String
-customers = undefined
+customers = Node "peter" (Node "mary" (Node "john" Empty))
 
 -- Ejercicio: ¿Cómo construirías la cola `customers` como cliente del TAD?
+-- clientes: enqueue "john" (enqueue "mary" (enqueue "peter" empty))
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> empty
 -- Empty
 empty :: Queue a
-empty = undefined
+empty = Empty
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> isEmpty empty
 -- True
 -- >>> isEmpty customers
 -- False
 isEmpty :: Queue a -> Bool
-isEmpty = undefined
+isEmpty Empty = True
+isEmpty _ = False
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> first customers
 -- "peter"
 first :: Queue a -> a
-first = undefined
+first Empty = error "firts sobre vacía"
+first (Node x _ ) = x
 
--- Complejidad: O(?)
+-- Complejidad: O(1)
 -- |
 -- >>> dequeue customers
 -- Node "mary" (Node "john" Empty)
@@ -95,7 +99,9 @@ first = undefined
 -- >>> dequeue (dequeue customers)
 -- Node "john" Empty
 dequeue :: Queue a -> Queue a
-dequeue = undefined
+dequeue Empty = error "dequeue sobre vacía"
+dequeue (Node _ q) = q 
+
 
 -- Complejidad: O(?)
 -- |
@@ -105,8 +111,8 @@ dequeue = undefined
 -- >>> enqueue "nicole" (enqueue "frank" customers)
 -- Node "peter" (Node "mary" (Node "john" (Node "frank" (Node "nicole" Empty))))
 enqueue :: a -> Queue a -> Queue a
-enqueue = undefined
-
+enqueue x Empty      = Node x Empty
+enqueue x (Node y q) = Node y (enqueue x q)
 {-
    La siguiente instancia de `Arbitrary` es para enseñar a QuickCheck
    a generar `Queue` aleatorias. No hay que saber cómo hacerlo;
