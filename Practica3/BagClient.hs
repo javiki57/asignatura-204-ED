@@ -29,14 +29,13 @@ mkBag xs = foldr insert empty xs
 -- >>> keys (mkBag "abracadabra")
 -- "abcdr"
 keys :: Ord a => Bag a -> [a]
-keys = undefined
-
+keys bag = foldBag (\e n s -> e:s) [] bag
 -- `bag2list`: convierte una bolsa en una lista de pares `(a,Int)`
 -- |
 -- >>> bag2List (mkBag "abracadabra")
 -- [('a',5),('b',2),('c',1),('d',1),('r',2)]
 bag2List :: Ord a => Bag a -> [(a, Int)]
-bag2List = undefined
+bag2List bag = undefined
 
 -- `cardinal`: devuelve el número de elementos de una bolsa
 -- |

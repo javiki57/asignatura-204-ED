@@ -215,21 +215,36 @@ b2 = mkBag "java"
 -- >>> union b1 b2
 -- LinearBag { 'a' 'a' 'a' 'e' 'h' 'j' 'k' 'l' 'l' 's' 'v' }
 union :: Ord a => Bag a -> Bag a -> Bag a
-union = undefined
+union Empty s = s
+union s Empty = s
+union (Node a n s) (Node b m r)
+               | a == b    = Node a (n+m) (union s r)
+               | a < b     = Node a n (union s (Node b m r))
+               | otherwise = Node b m (union (Node a n s) r)
 
 -- |
 -- >>> intersection b1 b2
 -- LinearBag { 'a' }
 intersection :: Ord a => Bag a -> Bag a -> Bag a
-intersection = undefined
-
+intersection Empty s = Empty
+intersection s Empty = Empty
+intersection (Node a n s) (Node b m r)
+                  | a == b    = Node a (min n m) (intersection s r)
+                  | a < b     = intersection s (Node b m r)
+                  | otherwise = intersection (Node a n s) r
 -- |
 -- >>> difference b1 b2
 -- LinearBag { 'e' 'h' 'k' 'l' 'l' 's' }
 -- >>> difference b2 b1
 -- LinearBag { 'a' 'j' 'v' }
 difference :: Ord a => Bag a -> Bag a -> Bag a
-difference = undefined
+difference s Empty = s
+difference Empty s = s
+difference (Node a n s) (Node b m r)
+                  | a == b && (n > m)   = Node a (n-m) (difference s r)
+                  | a == b              = difference s r
+                  | a < b               = Node a n (difference s (Node b m r))
+                  | otherwise           = difference (Node a n s) r
 
 {-
    Utiliza estas propiedades QuickCheck para comprobar la
