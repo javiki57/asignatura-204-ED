@@ -94,7 +94,7 @@ mkBag xs = foldr insert empty xs
 -- >>> empty
 -- LinearBag { }
 empty :: Bag a
-empty = undefined
+empty = Empty
 
 -- comprueba si una bolsa está vacía
 -- |
@@ -103,7 +103,8 @@ empty = undefined
 -- >>> isEmpty bolsa1
 -- False
 isEmpty :: Bag a -> Bool
-isEmpty = undefined
+isEmpty Empty = True
+isEmpty _ = False
 
 -- inserta un nuevo dato en una bolsa
 -- |
@@ -112,7 +113,11 @@ isEmpty = undefined
 -- >>> insert 'b' bolsa1
 -- LinearBag { 'a' 'a' 'b' 'b' 'b' 'b' 'c' 'c' 'd' }
 insert :: Ord a => a -> Bag a -> Bag a
-insert = undefined
+insert a Empty = Node a 1 Empty
+insert a (Node x n s)
+            | a < x     = Node a 1 (Node x n s)
+            | a == x    = Node x (n+1) s
+            | otherwise = Node x n (insert a s)
 
 -- devuelve el número de apariciones de un elemento en una bolsa
 -- (0 si el elemento no está en la bolsa)
@@ -122,7 +127,10 @@ insert = undefined
 -- >>> occurrences 'w' bolsa1
 -- 0
 occurrences :: (Ord a) => a -> Bag a -> Int
-occurrences = undefined
+occurrences x Empty = 0
+occurrences x (Node a n s)
+               | x == a    = n
+               | otherwise = occurrences x s
 
 -- borra una ocurrencia de un dato de una bolsa
 -- (devuelve la bolsa original si el dato no estaba en la bolsa)
@@ -134,8 +142,12 @@ occurrences = undefined
 -- >>> delete 'w' bolsa1
 -- LinearBag { 'a' 'a' 'b' 'b' 'b' 'c' 'c' 'd' }
 delete :: (Ord a) => a -> Bag a -> Bag a
-delete = undefined
-
+delete x Empty = Empty
+delete x (Node a n s)
+               | x == a    = Node a (n-1) s
+               | x > a     = Node a n (delete x s)
+               | otherwise = Node a n s
+ 
 -- instancia de la clase `Show` para imprimir las bolsas
 instance (Show a) => Show (Bag a) where
    show s = "LinearBag { " ++ show' s

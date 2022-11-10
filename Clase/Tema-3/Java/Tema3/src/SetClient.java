@@ -14,7 +14,7 @@ import java.util.List;
 public class SetClient {
 
     public static void main(String[] args) {
-        Set<Integer> s = new SortedLinkedSet<>();
+        Set<Integer> s = new MyArraySet<>();
 
         List<Integer> toInsert = List.of(2, 4, 6, 8, 7, 5, 3, 1);
         System.out.println("to insert: " + toInsert);
@@ -42,7 +42,11 @@ public class SetClient {
 
     // Ejercicio: define un método estático que devuelva la suma de los
     // elementos de un Set<Integer>
-    public static Integer sum(Set<Integer> set) {
-        return 0;
+    public static int sum(Set<Integer> set) {
+        int result = 0;
+        for (int x : set ) {
+            result += x;
+        }
+        return result;
     }
 }
