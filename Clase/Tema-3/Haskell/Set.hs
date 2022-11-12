@@ -195,7 +195,10 @@ insert x (Node y s)
 -- >>> delete 'f' sample
 -- Node 'a' (Node 'c' (Node 'z' Empty))
 delete :: Ord a => a -> Set a -> Set a
-delete = undefined
+delete x Empty = Empty
+delete x (Node y s)
+          | x == y    = s
+          | otherwise = (Node y (delete x s))
 
 {-
    La siguiente instancia de `Arbitrary` es para enseñar a QuickCheck
