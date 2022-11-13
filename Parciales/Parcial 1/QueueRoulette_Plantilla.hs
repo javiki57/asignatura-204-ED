@@ -47,19 +47,19 @@ sample1 = R (foldl (flip Q.enqueue) Q.empty [3,4,5,6,7,8,9,10,1,2]) 10
 -- Ejercicio 1 (0.05 ptos.)
 -- Crea una ruleta vacia
 empty :: Roulette a 
-empty = undefined
+empty = R Q.empty 0
 
 -- ===========================================================
 -- Ejercicio 2 (0.05 ptos.)
 -- Determina si una ruleta está vacia
 isEmpty :: Roulette a -> Bool
-isEmpty (R q size) = undefined
+isEmpty (R q size) = size == 0
 
 -- ===========================================================
 -- Ejercicio 3 (0.10 ptos.)
 -- devuelve el dato apuntado 
 sign  :: Roulette a ->  a
-sign r@(R q _) = undefined 
+sign r@(R q _) = Q.first q
  
 {-
 Prelude (QueueRoulette.hs)> sign sample1
@@ -72,7 +72,13 @@ Prelude (QueueRoulette.hs)> sign sample1
 -- turn (-n) r   moverá el puntero de la ruleta r en sentido antihorario n posiciones
 -- n puede ser cualquier número entero
 turn :: Integer ->  Roulette a ->  Roulette a
-turn n (R q size) = undefined
+turn n r@(R q size)
+    |size == 0 || m == 0 = r
+    |otherwise  = R (aux q m) size
+        where
+            m = mod n size
+            aux q 0 = q
+            aux q s | s > 0 = aux (Q.enqueue (Q.first q) (Q.dequeue q)) (s-1)
 
 {-
 turn 12 sample1
@@ -85,7 +91,7 @@ QueueRoulette:10(1,2,3,4,5,6,7,8,9,10)
 -- elimina el elemento situado en la posición del puntero y coloca el puntero 
 -- en la siguiente posición en sentido horario 
 delete :: Roulette a ->  Roulette a
-delete r@(R q size) = undefined
+delete r@(R q size) = R (Q.dequeue q) (size-1)
 
 {-
 delete sample1
@@ -96,7 +102,7 @@ QueueRoulette:9(4,5,6,7,8,9,10,1,2)
 -- inserta el elemento en la posición del puntero y corre el resto en sentido horario
 -- El insertado pasa a ser el destacado
 insert :: a  ->  Roulette a ->  Roulette a
-insert y (R q size) = undefined
+insert y (R q size) = turn (-1) (R (Q.enqueue y q) (size+1))
 
 {-
 Prelude (QueueRoulette.hs)> insert 20 sample1
@@ -112,14 +118,19 @@ QueueRoulette:0()
 -- Ejercicio 7 (0.15 ptos.)
 -- genera una ruleta con los objetos de la lista situados en orden horario y con el puntero apuntando al primero
 listToRoulette :: [a] -> Roulette a
-listToRoulette xs = undefined
+listToRoulette xs = foldr insert empty xs
 
 -- ===========================================================
 -- Ejercicio 8 (0.15 ptos.)
 -- genera una lista con los elementos de una ruleta. El primero será el apuntado por el
 -- puntero y luego irán los elementos en sentido horario
 rouletteToList :: Roulette a -> [a]
-rouletteToList (R q n) = undefined
+rouletteToList (R q n) = queueToList q
+    where
+        queueToList c
+            |Q.isEmpty c = []
+            |otherwise = Q.first c : queueToList (Q.dequeue c)
+
 
 -- ===========================================================
 -- Ejercicio 9 (0.20 ptos.)
