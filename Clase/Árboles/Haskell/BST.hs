@@ -58,7 +58,14 @@ insert x (Node y lt rt)
             | otherwise = Node y lt (insert x rt)
 
 search :: Ord a => a -> BST a -> Maybe a
-search = undefined
+search _ Empty = Nothing
+search x (Node y lt rt)
+            | x < y     = search x lt
+            | x == y    = Just y
+            | otherwise = search x rt
 
 isElem :: Ord a => a -> BST a -> Bool
-isElem = undefined
+isElem x t = aBool (search x t)
+    where
+        aBool Nothing  = False
+        aBool _        = True
