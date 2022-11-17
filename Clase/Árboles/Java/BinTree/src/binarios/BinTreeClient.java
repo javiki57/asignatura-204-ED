@@ -1,4 +1,4 @@
-/*
+package binarios;/*
   Estructuras de Datos
   Grado en Ingeniería Informática, del Software y de Computadores
   Tema 4. Árboles
