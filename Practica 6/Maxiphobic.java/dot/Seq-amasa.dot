@@ -1,0 +1,17 @@
+digraph "Seq-amasa" {
+node [fontname="Arial", fontcolor=red, shape=circle, style=filled, color="#66B268", fillcolor="#AFF4AF" ];
+edge [color = "#0070BF"];
+780237624 [label="a"];
+780237624 -> 1296064247;
+1296064247 [label="a"];
+1296064247 -> 1637070917;
+1637070917 [label="s"];
+l1296064247 [style=invis];
+1296064247 -> l1296064247;
+780237624 -> 205797316;
+205797316 [label="a"];
+205797316 -> 1702297201;
+1702297201 [label="m"];
+l205797316 [style=invis];
+205797316 -> l205797316;
+}
