@@ -24,7 +24,7 @@ public class HuffmanTest {
 
         // choose the message to test your code
 
-        String msg = enunciado;
+        String msg = magia;
 
         // your output should match that of 'magia.txt', 'cabra.txt', etc.
 
