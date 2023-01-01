@@ -60,17 +60,20 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
 		}
 
 		public boolean equals(Object obj) {
-			
-			// COMPLETAR 
-			
-			return false;
+
+            if(!(obj instanceof WeightedGraph.WeightedEdge<?,?>)){
+                return false;
+            }
+            WeightedEdge<V1,W1> we = (WeightedEdge<V1,W1>) obj;
+
+            return (src.equals(we.source()) && dst.equals(we.source()) ||
+                    src.equals(we.destination()) && dst.equals(we.source()) && wght.equals(we.destination()));
 		}
 		
 		public int compareTo(WeightedEdge<V1, W1> o) {
 
-			// COMPLETAR
-			
-			return 0;
+
+			return wght.compareTo(o.weight());
 		}
     }
 
@@ -87,29 +90,60 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
 
     public void addVertex(V v) {
 
-    	// COMPLETAR
+        if(graph.isDefinedAt(v)){
+            throw new GraphException("Error, el vértice pertenece al grafo");
+        }
+
+        graph.insert(v, new HashDictionary<V,W>());
 
     }
 
     public void addEdge(V src, V dst, W w) {
 
-    	// COMPLETAR
+    	if(!graph.isDefinedAt(src) || !graph.isDefinedAt(dst)){
+            throw new GraphException("Error, el vértice no pertenece al grafo");
+        }
+
+        Dictionary<V,W> dsrc = graph.valueOf(src);
+        Dictionary<V,W> ddst = graph.valueOf(dst);
+
+        dsrc.insert(dst,w);
+        ddst.insert(src,w);
 
     }
 
     public Set<Tuple2<V, W>> successors(V v) {
 
-    	// COMPLETAR
+    	Set<Tuple2<V,W>> tuple = new HashSet<>();
 
-        return null;
+        if(!graph.isDefinedAt(v)){
+            throw new GraphException("Error, v no pertenece al grafo.");
+        }
+
+        Dictionary<V,W> dic = graph.valueOf(v);
+
+        for(Tuple2<V,W> t : dic.keysValues()){
+            tuple.insert(t);
+        }
+
+        return tuple;
     }
 
 
     public Set<WeightedEdge<V, W>> edges() {
         
-    	// COMPLETAR
+    	Set<WeightedEdge<V,W>> s = new HashSet<>();
+
+        for(Tuple2<V,Dictionary<V,W>> tuple : graph.keysValues()){
+            V src = tuple._1();
+
+            for(Tuple2<V,W> tt : tuple._2().keysValues()){
+
+                s.insert(new WE<>(src,tt._1(),tt._2()));
+            }
+        }
     	
-        return null;
+        return s;
     }
 
 
