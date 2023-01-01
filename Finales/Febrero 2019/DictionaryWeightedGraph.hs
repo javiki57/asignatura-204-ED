@@ -47,29 +47,17 @@ empty :: WeightedGraph a w
 empty = WG D.empty
 
 addVertex :: (Ord a) => WeightedGraph a w -> a -> WeightedGraph a w
-addVertex (WG dic) a
-              | D.isDefinedAt a dic = WG dic
-              | otherwise           = WG (D.insert a D.empty dic)
+addVertex = undefined
 
 addEdge :: (Ord a, Show a) => WeightedGraph a w -> a -> a -> w -> WeightedGraph a w
-addEdge (WG wg) a b w
-              | (not (D.isDefinedAt a wg)) || (not (D.isDefinedAt b wg)) = error "Los vertices no pertenecen al grafo."
-              | otherwise = WG (addE a w b (addE b w a wg))
-              where
-                addE v1 peso v2 dic = D.insert v1 (D.insert v2 peso dic') dic
-                  where
-                    Just dic' = D.valueOf v1 dic
-                
+addEdge = undefined
 
 edges :: (Eq a, Eq w) => WeightedGraph a w -> [WeightedEdge a w]
-edges (WG wg) = nub [ WE a w b | (a,p) <- D.keysValues wg, (b,w) <- D.keysValues p]
+edges  = undefined
 
 successors :: (Ord a, Show a) => WeightedGraph a w -> a -> [(a,w)]
-successors (WG wg) v
-              | (not(D.isDefinedAt v wg)) = error "El vértice no pertenece al grafo."
-              | otherwise = D.keysValues dic'
-              where
-                Just dic' = D.valueOf v wg
+successors  = undefined
+
 
 -- NO EDITAR A PARTIR DE AQUÍ    
 -- DON'T EDIT ANYTHING BELOW THIS COMMENT
