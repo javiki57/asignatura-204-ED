@@ -15,6 +15,7 @@
 package dataStructures.graph;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 import dataStructures.dictionary.Dictionary;
 import dataStructures.dictionary.HashDictionary;
@@ -53,10 +54,8 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
         }
 
 		public int hashCode() {
-			
-			// COMPLETAR 
-			
-			return 0;
+
+			return Objects.hashCode(src) + Objects.hashCode(dst) + Objects.hashCode(wght);
 		}
 
 		public boolean equals(Object obj) {
@@ -64,14 +63,18 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
             if(!(obj instanceof WeightedGraph.WeightedEdge<?,?>)){
                 return false;
             }
+            /*
+             if(this == obj) return true;
+            if(obj == null || getClass() != obj.getClass()) return false;
+            */
+
             WeightedEdge<V1,W1> we = (WeightedEdge<V1,W1>) obj;
 
-            return (src.equals(we.source()) && dst.equals(we.source()) ||
-                    src.equals(we.destination()) && dst.equals(we.source()) && wght.equals(we.destination()));
+            return (Objects.equals(src,we.source()) && Objects.equals(dst,we.source()) ||
+                    Objects.equals(src, we.destination()) && Objects.equals(dst,we.source()) && Objects.equals(wght,we.destination()));
 		}
-		
-		public int compareTo(WeightedEdge<V1, W1> o) {
 
+		public int compareTo(WeightedEdge<V1, W1> o) {
 
 			return wght.compareTo(o.weight());
 		}
@@ -131,7 +134,7 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
 
 
     public Set<WeightedEdge<V, W>> edges() {
-        
+
     	Set<WeightedEdge<V,W>> s = new HashSet<>();
 
         for(Tuple2<V,Dictionary<V,W>> tuple : graph.keysValues()){
@@ -139,10 +142,10 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
 
             for(Tuple2<V,W> tt : tuple._2().keysValues()){
 
-                s.insert(new WE<>(src,tt._1(),tt._2()));
+                s.insert(new WE<V,W>(src,tt._1(),tt._2()));
             }
         }
-    	
+
         return s;
     }
 

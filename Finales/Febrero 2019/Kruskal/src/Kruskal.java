@@ -25,9 +25,46 @@ import dataStructures.set.HashSet;
 public class Kruskal {
 	public static <V,W> Set<WeightedEdge<V,W>> kruskal(WeightedGraph<V,W> g) {
 
-		// COMPLETAR
-		
-		return null;
+		Set<WeightedEdge<V,W>> set = new HashSet<>();
+		PriorityQueue<WeightedEdge<V,W>> pq = new LinkedPriorityQueue<>();
+		Dictionary<V,V> dic = new HashDictionary<>();
+
+		for(WeightedEdge<V,W> edge : g.edges()){
+			pq.enqueue(edge);
+		}
+
+		//Asociamos un vértice a uno mismo
+		for(V v : g.vertices()){
+			dic.insert(v, v);
+		}
+
+
+		while(pq.isEmpty()){
+			WeightedEdge<V,W> edge = pq.first();
+			pq.dequeue();
+			V a = representante(edge.source(),dic);
+			V b = representante(edge.destination(),dic);
+
+			if(a.equals(b)){
+				dic.insert(b,edge.source());
+				set.insert(edge);
+			}
+
+		}
+
+		return set;
+	}
+
+	private static <V> V representante(V src, Dictionary<V,V> dic){
+		V v = src;
+		V r = dic.valueOf(src);
+
+		while(!r.equals(src)){
+			v = r;
+			r = dic.valueOf(v);
+		}
+
+		return r;
 	}
 
 	// Sólo para evaluación continua / only for part time students
