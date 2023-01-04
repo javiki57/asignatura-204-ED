@@ -14,7 +14,8 @@ import DataStructures.Graph.WeightedDiGraph
 import DataStructures.Graph.WeightedDiGraphBFT
 
 maxFlowPath :: Path (WDiEdge a Integer) -> Integer
-maxFlowPath = undefined
+maxFlowPath [] = 0
+maxFlowPath path = minimum [ p | (E a p b) <- path]
 
 updateEdge ::(Eq a) => a -> a -> Integer -> [WDiEdge a Integer] -> [WDiEdge a Integer]
 updateEdge = undefined

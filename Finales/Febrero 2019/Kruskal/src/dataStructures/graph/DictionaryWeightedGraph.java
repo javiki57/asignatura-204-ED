@@ -108,10 +108,10 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
         }
 
         Dictionary<V,W> dsrc = graph.valueOf(src);
-        Dictionary<V,W> ddst = graph.valueOf(dst);
+       // Dictionary<V,W> ddst = graph.valueOf(dst);
 
         dsrc.insert(dst,w);
-        ddst.insert(src,w);
+       // ddst.insert(src,w);
 
     }
 
