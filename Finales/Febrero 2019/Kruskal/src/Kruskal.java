@@ -42,9 +42,11 @@ public class Kruskal {
 		while(!pq.isEmpty()){
 			WeightedEdge<V,W> edge = pq.first();
 			pq.dequeue();
-			if(!representante(edge.source(), edge.destination(), dic)){
-				dic.insert(edge.destination(), edge.source());
+			V a = representante(edge.source(),dic);
+			V b = representante(edge.destination(),dic);
 
+			if(!a.equals(b)){
+				dic.insert(representante(edge.destination(),dic), edge.source());
 				set.insert(edge);
 			}
 
@@ -53,28 +55,15 @@ public class Kruskal {
 		return set;
 	}
 
-	private static <V> boolean representante(V src,V dst, Dictionary<V,V> dic ){
+	private static <V> V representante(V src, Dictionary<V,V> dic ){
 
-		V aux1 = src;
-		V aux2 = dst;
-		int i =0;
-		boolean si =false;
+		if(src.equals(dic.valueOf(src))){
 
-		while(i< dic.size()) {
-			if (!aux1.equals(dic.valueOf(aux1))) {
-				aux1 = dic.valueOf(aux1);
-			}
-
-			if (!aux2.equals(dic.valueOf(aux2))) {
-				aux2 = dic.valueOf(aux2);
-			}
-
-			if (dic.valueOf(aux1).equals(dic.valueOf(aux2))){
-				return si= true;
-			}
-			i++;
+			return src;
+		}else{
+			return representante(dic.valueOf(src),dic);
 		}
-		return si;
+
 	}
 
 	// Sólo para evaluación continua / only for part time students
