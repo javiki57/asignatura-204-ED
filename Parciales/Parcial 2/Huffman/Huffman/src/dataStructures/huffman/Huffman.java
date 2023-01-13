@@ -33,7 +33,6 @@ public class Huffman {
         if(dic.size() == 1){
             throw new HuffmanException("Se necesita que el mensaje tenga 2 caracteres distintos");
         }
-
         return dic;
     }
 
