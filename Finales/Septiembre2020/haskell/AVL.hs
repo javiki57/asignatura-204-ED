@@ -36,43 +36,57 @@ data AVL = Empty | Node Bin Int Capacity AVL AVL deriving Show
 
 
 emptyBin :: Capacity -> Bin
-emptyBin _ = undefined
+emptyBin capacity = B capacity []
 
 remainingCapacity :: Bin -> Capacity
-remainingCapacity _ = undefined
+remainingCapacity (B cap xs) = cap
 
 addObject :: Weight -> Bin -> Bin
-addObject _ _ = undefined
+addObject w (B cap xs)
+            | w > cap   = error "El objeto no cabe en el cubo"
+            | otherwise = (B (cap-w) (w:xs))
 
 maxRemainingCapacity :: AVL -> Capacity
-maxRemainingCapacity _ = undefined
+maxRemainingCapacity Empty = error "Empty tree."
+maxRemainingCapacity (Node bin h cap izq der) = cap
 
 height :: AVL -> Int
-height _ = undefined
+height Empty = error "Empty tree."
+height (Node bin h cap izq der) = h
 
 
  
 nodeWithHeight :: Bin -> Int -> AVL -> AVL -> AVL
-nodeWithHeight _ _ _ _ = undefined
+nodeWithHeight (B cap xs) h left right = Node (B cap xs) h (maximum [cap - sum xs, maxRemainingCapacity left, maxRemainingCapacity right]) left right
 
 
 node :: Bin -> AVL -> AVL -> AVL
-node _ _ _ = undefined
+node (B cap xs) izq der = (Node (B cap xs) (1 + max (height izq) (height der)) (maximum [cap - sum xs, maxRemainingCapacity izq, maxRemainingCapacity der]) izq der)
 
 rotateLeft :: Bin -> AVL -> AVL -> AVL
-rotateLeft _ _ _ = undefined
+rotateLeft c ele (Node b h cap rl rr) = node b rl (node c ele rr)
 
 addNewBin :: Bin -> AVL -> AVL
-addNewBin _ _ = undefined
+addNewBin b Empty = Node b 1 (remainingCapacity b) Empty Empty
+addNewBin b (Node bin h cap left right)
+    | height left > height right + 1 = rotateLeft bin left (addNewBin b right)
+    | otherwise = node bin left (addNewBin b right)
  
 addFirst :: Capacity -> Weight -> AVL -> AVL
-addFirst _ _ _ = undefined
+addFirst _ _ Empty = Empty
+addFirst _ w (Node (B cap xs) h maxCap left right)
+    | w > cap = addNewBin (emptyBin w) (Node (B cap xs) h maxCap left right)
+    | maxCap >= w = node (addObject w (B cap xs)) left right
+    | maxRemainingCapacity left >= w = node (B cap xs) (addFirst cap w left) right
+    | otherwise = node (B cap xs) left (addFirst cap w right)
 
 addAll:: Capacity -> [Weight] -> AVL
-addAll _ _ = undefined
+addAll _ [] = Empty
+addAll w (x:xs) = addFirst w x (addAll w xs)
 
 toList :: AVL -> [Bin]
-toList _ = undefined
+toList Empty = []
+toList (Node bin _ _ left right) = toList left ++ [bin] ++ toList right
 
 {-
 	SOLO PARA ALUMNOS SIN EVALUACION CONTINUA
