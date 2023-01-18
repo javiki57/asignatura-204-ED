@@ -61,7 +61,7 @@ nodeWithHeight (B cap xs) h left right = Node (B cap xs) h (maximum [cap - sum x
 
 
 node :: Bin -> AVL -> AVL -> AVL
-node (B cap xs) izq der = (Node (B cap xs) (1 + max (height izq) (height der)) (maximum [cap - sum xs, maxRemainingCapacity izq, maxRemainingCapacity der]) izq der)
+node (B cap xs) izq der = (Node (B cap xs) (1 + max (height izq) (height der)) (maximum [cap, maxRemainingCapacity izq, maxRemainingCapacity der]) izq der)
 
 rotateLeft :: Bin -> AVL -> AVL -> AVL
 rotateLeft c ele (Node b h cap rl rr) = node b rl (node c ele rr)

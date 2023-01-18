@@ -6,6 +6,7 @@
 
 import dataStructures.list.List;
 import dataStructures.list.LinkedList;
+import dataStructures.list.ListException;
 
 import java.util.Iterator;
 
@@ -15,18 +16,21 @@ class Bin {
     private List<Integer> weights; // weights of objects included in this bin
 
     public Bin(int initialCapacity) {
-        // todo
+        this.remainingCapacity = initialCapacity;
+        weights = new LinkedList<>();
     }
 
     // returns capacity left for this bin
     public int remainingCapacity() {
-        // todo
-        return 0;
+
+        return this.remainingCapacity;
     }
 
     // adds a new object to this bin
     public void addObject(int weight) {
-        // todo
+        if(weight > remainingCapacity()) throw new ListException("Error, el objeto no cabe en el cubo.");
+        weights.append(weight);
+        this.remainingCapacity -= weight;
     }
 
     // returns an iterable through weights of objects included in this bin
@@ -59,29 +63,41 @@ public class AVL {
 
         // recomputes height of this node
         void setHeight() {
-            // todo
+            this.height = 1 + Math.max(left.height, right.height);
         }
 
         // recomputes max capacity among bins in tree rooted at this node
         void setMaxRemainingCapacity() {
-            // todo
+            int max = Math.max(left.maxRemainingCapacity,right.maxRemainingCapacity);
+
+            this.maxRemainingCapacity = Math.max(bin.remainingCapacity(),max);
         }
 
         // left-rotates this node. Returns root of resulting rotated tree
         Node rotateLeft() {
-            // todo
-            return null;
+
+            Node rotated = right;
+            this.right = rotated.left;
+            rotated.left = this;
+
+            this.setMaxRemainingCapacity();
+            this.setHeight();
+
+            rotated.setMaxRemainingCapacity();
+            rotated.setHeight();
+
+            return rotated;
         }
     }
 
     private static int height(Node node) {
-        // todo
-        return 0;
+
+        return node.height;
     }
 
     private static int maxRemainingCapacity(Node node) {
-        // todo
-        return 0;
+
+        return node.maxRemainingCapacity;
     }
 
     private Node root; // root of AVL tree
@@ -92,7 +108,7 @@ public class AVL {
 
     // adds a new bin at the end of right spine.
     private void addNewBin(Bin bin) {
-        // todo
+        
     }
 
     // adds an object to first suitable bin. Adds
