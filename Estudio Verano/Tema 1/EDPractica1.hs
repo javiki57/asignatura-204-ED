@@ -37,7 +37,7 @@ p_ternas x y = x>0 && y>0 && x>y ==> esTerna l1 l2 h
 -------------------------------------------------------------------------------
 
 intercambia :: (a,b) -> (b,a)
-intercambia (x,y) = (y,x) -- completar
+intercambia (x,y) = (y,x)
 
 -------------------------------------------------------------------------------
 -- Ejercicio 3 - ordena2 y ordena3
@@ -45,7 +45,9 @@ intercambia (x,y) = (y,x) -- completar
 
 -- 3.a
 ordena2 :: Ord a => (a,a) -> (a,a)
-ordena2 = undefined -- completar
+ordena2 (x,y)
+      | x <= y    = (x,y)
+      | otherwise = (y,x)
 
 p1_ordena2 x y = enOrden (ordena2 (x,y))
    where enOrden (x,y) = x <= y
@@ -57,12 +59,17 @@ p2_ordena2 x y = mismosElementos (x,y) (ordena2 (x,y))
 
 -- 3.b
 ordena3 :: Ord a => (a,a,a) -> (a,a,a)
-ordena3 = undefined -- completar
+ordena3 (x,y,z)
+      | x > y    = ordena3 (y,x,z)
+      | y > z    = ordena3 (x,z,y)
+      |otherwise = (x,y,z)
 
 -- 3.c
-p1_ordena3 x y z = undefined -- completar
+p1_ordena3 x y z = enOrden (ordena3 (x,y,z))
+      where enOrden (x,y,z) = x <= y && y <= z
 
-p2_ordena3 x y z = undefined -- completar
+p2_ordena3 x y z = mismosElementos (x,y,z) (ordena3 (x,y,z)) 
+      where mismosElementos (x,y,z) (x',y',z') = (x == x' && y == y' && z == z') || (x == y' && y == z' && z == x')
 
 -------------------------------------------------------------------------------
 -- Ejercicio 4 - max2
@@ -70,13 +77,14 @@ p2_ordena3 x y z = undefined -- completar
 
 -- 4.a
 max2 :: Ord a => a -> a -> a
-max2 = undefined -- completar
+max2 x y
+      | x > y     = x
+      | otherwise = y
 
 -- 4.b
 -- p1_max2: el máximo de dos números x e y coincide o bien con x o bien con y.
 
-p1_max2 = undefined -- completar
-
+p1_max2 x y = max2 x y == x || max2 x y == y 
 -- p2_max2: el máximo de x e y es mayor o igual que x y mayor o igual que y.
 
 p2_max2 = undefined -- completar
