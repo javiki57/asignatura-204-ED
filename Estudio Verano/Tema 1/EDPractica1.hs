@@ -87,15 +87,15 @@ max2 x y
 p1_max2 x y = max2 x y == x || max2 x y == y 
 -- p2_max2: el máximo de x e y es mayor o igual que x y mayor o igual que y.
 
-p2_max2 = undefined -- completar
+p2_max2 x y = max2 x y >= x || max2 x y >= y -- completar
 
 -- p3_max2: si x es mayor o igual que y, entonces el máximo de x e y es x.
 
-p3_max2 = undefined -- completar
+p3_max2 x y = max2 x y >= y ==> max2 x y == x -- completar
 
 -- p4_max2: si y es mayor o igual que x, entonces el máximo de x e y es y.
 
-p4_max2 = undefined -- completar
+p4_max2 x y = y >= x ==> max2 x y == y  -- completar
 
 -------------------------------------------------------------------------------
 -- Ejercicio 5 - entre (resuelto, se usa en el ejercicio 7)
