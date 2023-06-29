@@ -105,6 +105,12 @@ entre :: Ord a => a -> (a, a) -> Bool
 entre x (inf,sup) = inf <= x && x <= sup
 
 -------------------------------------------------------------------------------
+-- Ejercicio 6 --
+-------------------------------------------------------------------------------
+iguales3 :: Eq a => (a,a,a) -> Bool
+iguales3 (x,y,z) = x == y && y == z
+
+-------------------------------------------------------------------------------
 -- Ejercicio 7 - descomponer
 -------------------------------------------------------------------------------
 
@@ -124,14 +130,29 @@ type Minutos       = Integer
 type Segundos      = Integer
 
 descomponer :: TotalSegundos -> (Horas,Minutos,Segundos)
-descomponer x = undefined -- completar
-
+descomponer x = (h,m,s)
+      where
+            (h,m') = divMod x 3600
+            (m,s)  = divMod m' 60
 -- 7.b
 p_descomponer x = x>=0 ==> h*3600 + m*60 + s == x
                            && m `entre` (0,59)
                            && s `entre` (0,59)
           where (h,m,s) = descomponer x
 
+
+-------------------------------------------------------------------------------
+-- Ejercicio 8 - 
+-------------------------------------------------------------------------------
+
+unEuro :: Double
+unEuro = 166.386
+
+pesetasAEuros :: Double -> Double
+pesetasAEuros x = x / unEuro
+
+eurosAPesetas :: Double -> Double
+eurosAPesetas x = x * unEuro
 -------------------------------------------------------------------------------
 -- Ejercicio 14 - potencia
 -------------------------------------------------------------------------------
