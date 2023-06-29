@@ -7,8 +7,49 @@
 
 module Practica2 where
 
-import           Data.List       (nub, (\\))
+import           Data.List      -- (nub, (\\))
 import           Test.QuickCheck
+
+-------------------------------------------------------------------------------
+-- Ejercicio 1 - 
+-------------------------------------------------------------------------------
+
+data Direction = North | South | East | West
+                            deriving (Eq,Ord,Enum,Show)
+
+(<<) :: Direction -> Direction -> Bool
+a << b = fromEnum a < fromEnum b
+
+p_menor x y = (x < y) == (x << y)
+instance Arbitrary Direction where
+        arbitrary = do
+            n <- choose (0,3)
+            return $ toEnum n
+
+
+-------------------------------------------------------------------------------
+-- Ejercicio 2 - 
+-------------------------------------------------------------------------------
+
+máximoYresto :: Ord a => [a] -> (a,[a])
+máximoYresto []  = error "Lista vacía"
+máximoYresto [x] = (x,[])
+máximoYresto (x:xs)
+        | x > max   = (x, max:resto)
+        | otherwise = (max, x:resto)
+    where
+        (max, resto) = máximoYresto xs
+
+
+máximoYresto' :: Ord a => [a] -> (a,[a])
+máximoYresto' []  = error "Lista vacía"
+máximoYresto' [x] = (x,[])
+máximoYresto' (x:xs)
+        | x > max   = (x, (sort (max:res)))
+        | otherwise = (max, (sort (x:res)))
+    where
+        (max,res) = máximoYresto' xs
+
 
 -------------------------------------------------------------------------------
 -- Ejercicio 4 - distintos
