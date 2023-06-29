@@ -153,17 +153,70 @@ pesetasAEuros x = x / unEuro
 
 eurosAPesetas :: Double -> Double
 eurosAPesetas x = x * unEuro
+
+-------------------------------------------------------------------------------
+-- Ejercicio 9 - 
+-------------------------------------------------------------------------------
+
+infix 4 ~=
+(~=) :: Double -> Double -> Bool
+x ~= y = abs (x-y) < epsilon
+      where epsilon = 1/1000
+
+
+-------------------------------------------------------------------------------
+-- Ejercicio 10 - 
+-------------------------------------------------------------------------------
+
+raices :: Double -> Double -> Double -> (Double, Double)
+raices a b c
+      | raiz < 0  = error "Raices no reales"
+      | otherwise = (x,y)
+      where
+            raiz = b*b-4*a*c
+            x = (-b + sqrt(raiz))/2*a
+            y = (-b - sqrt(raiz))/2*a
+
+
+-------------------------------------------------------------------------------
+-- Ejercicio 11 - 
+-------------------------------------------------------------------------------
+
+esMúltiplo :: Integer -> Integer -> Bool
+esMúltiplo x y = x `mod` y == 0
+
+-------------------------------------------------------------------------------
+-- Ejercicio 12 - 
+-------------------------------------------------------------------------------
+
+(==>>) :: Bool -> Bool -> Bool
+False ==>> _ = True
+True ==>> y  = y
+
+-------------------------------------------------------------------------------
+-- Ejercicio 13 - 
+-------------------------------------------------------------------------------
+
+esBisiesto :: Integer -> Bool
+esBisiesto x
+      | x `mod` 4 == 0                       = True
+      | x `mod` 100 == 0 && x `mod` 400 == 0 = True
+      | otherwise                            = False
+
 -------------------------------------------------------------------------------
 -- Ejercicio 14 - potencia
 -------------------------------------------------------------------------------
 
 -- 14.a
 potencia :: Integer -> Integer -> Integer
-potencia b n = undefined -- completar
+potencia b 0 = 1
+potencia b n = b * potencia b (n-1)
 
 -- 14.b
 potencia' :: Integer -> Integer -> Integer
-potencia' b n = undefined -- completar
+potencia' b n
+      | even n    = potencia (potencia b (n `div` 2)) 2
+      | otherwise = b * potencia (potencia b ((n-1) `div` 2)) 2
 
 -- 14.c
 p_pot b n =
