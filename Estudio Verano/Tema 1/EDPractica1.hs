@@ -229,3 +229,32 @@ p_pot b n =
 Escribe en este comentario tu razonamiento:
 
 -}
+
+-------------------------------------------------------------------------------
+-- Ejercicio 15 -
+-------------------------------------------------------------------------------
+
+factorial :: Integer -> Integer
+factorial 0 = 1
+factorial n = n * factorial (n-1)
+
+-------------------------------------------------------------------------------
+-- Ejercicio 16 -
+-------------------------------------------------------------------------------
+
+divideA :: Integer -> Integer -> Bool
+divideA x y = y `mod` x == 0
+
+p1_divideA x y = y/=0 && y `divideA` x ==> div x y * y == x
+
+-------------------------------------------------------------------------------
+-- Ejercicio 17 -
+-------------------------------------------------------------------------------
+
+mediana :: Ord a => (a,a,a,a,a) -> a
+mediana (x,y,z,t,u)
+      | x > z             = mediana (z,y,x,t,u)
+      | y > z             = mediana (x,z,y,t,u)
+      | z > t             = mediana (x,y,t,z,u)
+      | z > u             = mediana (x,y,u,t,z)
+      | otherwise         = z
