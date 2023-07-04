@@ -32,23 +32,17 @@ instance Arbitrary Direction where
 -------------------------------------------------------------------------------
 
 máximoYresto :: Ord a => [a] -> (a,[a])
-máximoYresto []  = error "Lista vacía"
-máximoYresto [x] = (x,[])
-máximoYresto (x:xs)
-        | x > max   = (x, max:resto)
-        | otherwise = (max, x:resto)
+máximoYresto []     = error "Lista vacía"
+máximoYresto (x:xs) = (maximo, filter (/= maximo) (x:xs))
     where
-        (max, resto) = máximoYresto xs
+        maximo = maximum (x:xs)
 
 
 máximoYresto' :: Ord a => [a] -> (a,[a])
-máximoYresto' []  = error "Lista vacía"
-máximoYresto' [x] = (x,[])
-máximoYresto' (x:xs)
-        | x > max   = (x, (sort (max:res)))
-        | otherwise = (max, (sort (x:res)))
+máximoYresto' []     = error "Lista vacía"
+máximoYresto' (x:xs) = (maximo, sort (filter (/= maximo) (x:xs)))
     where
-        (max,res) = máximoYresto' xs
+        maximo = maximum (x:xs)
 
 
 -------------------------------------------------------------------------------
