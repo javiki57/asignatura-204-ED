@@ -112,7 +112,12 @@ mcm x y = div (x*y) (mcd x y)
 -- Usa Hoogle para encontrar información sobre la función 'zip'.
 
 empareja :: [a] -> [b] -> [(a, b)] -- predefinida como zip
-empareja xs ys = undefined
+empareja xs ys = [(x,y) | (x,y) <- juntar xs ys]
+    where
+        juntar [] _          = []
+        juntar _ []          = []
+        juntar (x:xs) (y:ys) = (x,y) : juntar xs ys
+
 
 prop_empareja_OK :: (Eq b, Eq a) => [a] -> [b] -> Bool
 prop_empareja_OK xs ys = undefined
