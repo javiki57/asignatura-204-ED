@@ -99,6 +99,11 @@ mcd x y =  maximum divisoresjuntos
     where
         divisoresjuntos = [ n | n <- divisores' x , t <- divisores' y , n==t]
 
+
+mcm :: Int -> Int -> Int
+mcm x y = div (x*y) (mcd x y) 
+
+        
 -------------------------------------------------------------------------------
 -- Ejercicio [empareja] de la lista de ejercicios extra
 -------------------------------------------------------------------------------
