@@ -50,14 +50,19 @@ máximoYresto' (x:xs) = (maximo, sort (filter (/= maximo) (x:xs)))
 -------------------------------------------------------------------------------
 
 distintos :: Eq a => [a] -> Bool
-distintos = undefined
+distintos []  = True
+distintos (x:xs) =  x `notElem` xs && distintos xs
 
 -------------------------------------------------------------------------------
 -- Ejercicio 3 - reparte
 -------------------------------------------------------------------------------
 
 reparte :: [a] -> ([a], [a])
-reparte = undefined
+reparte []     = ([],[])
+reparte [x]    = ([x],[])
+reparte (x:y:xs) = (x:parte1 , y:parte2)
+    where
+        (parte1, parte2) = reparte xs
 
 -------------------------------------------------------------------------------
 -- Ejercicio [empareja] de la lista de ejercicios extra
