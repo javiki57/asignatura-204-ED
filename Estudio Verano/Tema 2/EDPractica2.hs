@@ -119,8 +119,10 @@ empareja xs ys = [(x,y) | (x,y) <- juntar xs ys]
         juntar (x:xs) (y:ys) = (x,y) : juntar xs ys
 
 
-prop_empareja_OK :: (Eq b, Eq a) => [a] -> [b] -> Bool
-prop_empareja_OK xs ys = undefined
+emparejaCon :: (a -> b -> c) -> [a] -> [b] -> [c]
+emparejaCon f [] _ = []
+emparejaCon f _ [] = []
+emparejaCon f (x:xs) (y:ys) = f x y : emparejaCon f xs ys
 
 -------------------------------------------------------------------------------
 -- Ejercicio 13 - desconocida
