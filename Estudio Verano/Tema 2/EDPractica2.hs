@@ -139,6 +139,9 @@ esPrimo x = funcion x
 primosHasta :: Int -> [Int]
 primosHasta x = [ lista | lista <- [2..x] , esPrimo lista]
 
+primosHasta' :: Int -> [Int]
+primosHasta' x = filter (esPrimo) [1..x] 
+
 -------------------------------------------------------------------------------
 -- Ejercicio 13 - desconocida
 -------------------------------------------------------------------------------
