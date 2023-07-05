@@ -148,6 +148,8 @@ primosHasta' x = filter (esPrimo) [1..x]
 pares :: Int -> [(Int,Int)]
 pares n = filter (\(x,y) -> x <= y) [ (x,y) | x <- primosHasta n, y <- primosHasta n,  x+y == n ]
 
+goldbach :: Int -> Bool
+goldbach n = n >= 2 &&  not(null (pares n))
 
 -------------------------------------------------------------------------------
 -- Ejercicio 13 - desconocida
