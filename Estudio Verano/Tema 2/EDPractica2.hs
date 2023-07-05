@@ -136,6 +136,8 @@ esPrimo x = funcion x
             | divi == [1,x] = True
             | otherwise  = False
 
+primosHasta :: Int -> [Int]
+primosHasta x = [ lista | lista <- [2..x] , esPrimo lista]
 
 -------------------------------------------------------------------------------
 -- Ejercicio 13 - desconocida
