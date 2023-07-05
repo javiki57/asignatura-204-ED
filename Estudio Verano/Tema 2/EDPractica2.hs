@@ -124,6 +124,19 @@ emparejaCon f [] _ = []
 emparejaCon f _ [] = []
 emparejaCon f (x:xs) (y:ys) = f x y : emparejaCon f xs ys
 
+
+-------------------------------------------------------------------------------
+-- Ejercicio 8 --
+-------------------------------------------------------------------------------
+esPrimo :: Int -> Bool
+esPrimo x = funcion x
+    where
+        divi = divisores x
+        funcion x
+            | divi == [1,x] = True
+            | otherwise  = False
+
+
 -------------------------------------------------------------------------------
 -- Ejercicio 13 - desconocida
 -------------------------------------------------------------------------------
