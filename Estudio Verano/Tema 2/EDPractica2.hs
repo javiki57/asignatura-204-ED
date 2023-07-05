@@ -204,9 +204,6 @@ prop_ordena_OK = undefined
 mezcla :: Ord a => [a] -> [a] -> [a]
 mezcla  ys = undefined
 
--------------------------------------------------------------------------------
--- Ejercicio [pares] de la lista de ejercicios extra
--------------------------------------------------------------------------------
 
 cotizacion :: [(String, Double)]
 cotizacion = [("apple", 116), ("intel", 35), ("google", 824), ("nvidia", 67)]
@@ -241,7 +238,12 @@ valorCartera cartera mercado = undefined
 -------------------------------------------------------------------------------
 
 concatP :: [[a]] -> [a]
-concatP xss = undefined
+concatP [] = []
+concatP[[x]] = [x]
+concatP (x:xs) = x ++ concatP xs
+
+concat' :: [[a]] -> [a]
+concat' xss = foldr (++) [] xss
 
 concatC :: [[a]] -> [a]
-concatC xss = undefined
+concatC xss = [ x | xs <- xss, x <- xs]
