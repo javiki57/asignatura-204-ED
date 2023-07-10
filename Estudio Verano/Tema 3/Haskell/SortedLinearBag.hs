@@ -94,7 +94,7 @@ mkBag xs = foldr insert empty xs
 -- >>> empty
 -- LinearBag { }
 empty :: Bag a
-empty = undefined
+empty = Empty
 
 -- comprueba si una bolsa está vacía
 -- |
@@ -103,7 +103,8 @@ empty = undefined
 -- >>> isEmpty bolsa1
 -- False
 isEmpty :: Bag a -> Bool
-isEmpty = undefined
+isEmpty Empty = True
+isEmpty _     = False  
 
 -- inserta un nuevo dato en una bolsa
 -- |
@@ -112,7 +113,12 @@ isEmpty = undefined
 -- >>> insert 'b' bolsa1
 -- LinearBag { 'a' 'a' 'b' 'b' 'b' 'b' 'c' 'c' 'd' }
 insert :: Ord a => a -> Bag a -> Bag a
-insert = undefined
+insert x Empty = Node x 1 Empty
+insert x (Node a i n)
+         | x == a    = (Node a (i+1) n)
+         | x < a     = (Node x 1 (Node a i n))
+         | otherwise = (Node a i (insert x n))
+         
 
 -- devuelve el número de apariciones de un elemento en una bolsa
 -- (0 si el elemento no está en la bolsa)
@@ -122,7 +128,10 @@ insert = undefined
 -- >>> occurrences 'w' bolsa1
 -- 0
 occurrences :: (Ord a) => a -> Bag a -> Int
-occurrences = undefined
+occurrences a Empty = 0
+occurrences a (Node x i n)
+            | a == x    = i
+            | otherwise = occurrences a n
 
 -- borra una ocurrencia de un dato de una bolsa
 -- (devuelve la bolsa original si el dato no estaba en la bolsa)
@@ -134,7 +143,11 @@ occurrences = undefined
 -- >>> delete 'w' bolsa1
 -- LinearBag { 'a' 'a' 'b' 'b' 'b' 'c' 'c' 'd' }
 delete :: (Ord a) => a -> Bag a -> Bag a
-delete = undefined
+delete a Empty = Empty
+delete a (Node x i n)
+         | a == x && i>=0 = Node x (i-1) n
+         | a == x && i<0  = n
+         | otherwise      = (Node x i (delete a n))
 
 -- instancia de la clase `Show` para imprimir las bolsas
 instance (Show a) => Show (Bag a) where
@@ -203,13 +216,23 @@ b2 = mkBag "java"
 -- >>> union b1 b2
 -- LinearBag { 'a' 'a' 'a' 'e' 'h' 'j' 'k' 'l' 'l' 's' 'v' }
 union :: Ord a => Bag a -> Bag a -> Bag a
-union = undefined
+union n1 Empty = n1
+union Empty n2 = n2
+union (Node x i n) (Node y t m)
+         | x == y    = (Node x (i+t) (union n m))
+         | x < y     = (Node x i (union n (Node y t m)))
+         | otherwise = (Node y t (union (Node x i n) m))
 
 -- |
 -- >>> intersection b1 b2
 -- LinearBag { 'a' }
 intersection :: Ord a => Bag a -> Bag a -> Bag a
-intersection = undefined
+intersection n1 Empty = Empty
+intersection Empty n2 = Empty
+intersection (Node a i n) (Node b t m)
+               | a == b    = Node a (min i t) (intersection n m)
+               | a < b     = intersection n (Node b t m)
+               | otherwise = intersection m (Node a i n)
 
 -- |
 -- >>> difference b1 b2
@@ -217,7 +240,13 @@ intersection = undefined
 -- >>> difference b2 b1
 -- LinearBag { 'a' 'j' 'v' }
 difference :: Ord a => Bag a -> Bag a -> Bag a
-difference = undefined
+difference n1 Empty = n1
+difference Empty n2 = n2
+difference (Node x i n) (Node y t m)
+               | x == y && (i>t) = Node x (i-t) (difference n m)
+               | x == y          = difference n m
+               | x < y           = Node x i (difference n (Node y t m))
+               | otherwise       = difference (Node x i n) m
 
 {-
    Utiliza estas propiedades QuickCheck para comprobar la
