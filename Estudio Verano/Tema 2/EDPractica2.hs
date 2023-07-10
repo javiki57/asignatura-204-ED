@@ -210,16 +210,25 @@ cotizacion :: [(String, Double)]
 cotizacion = [("apple", 116), ("intel", 35), ("google", 824), ("nvidia", 67)]
 
 buscarRec :: Eq a => a -> [(a,b)] -> [b]
-buscarRec x ys = undefined
+buscarRec x [] = []
+buscarRec x ((k,v):xs)
+            | k == x    = [v]
+            | otherwise = buscarRec x xs
+
 
 buscarC :: Eq a => a -> [(a, b)] -> [b]
-buscarC x ys = undefined
+buscarC x ys = [ v | (k,v) <- ys, k == x ]
 
 buscarP :: Eq a => a -> [(a, b)] -> [b]
-buscarP x ys = undefined
-
+buscarP x ys = foldr f [] ys
+    where
+        f cab solCola
+                | x == fst cab = [snd cab]
+                | otherwise    = solCola
+        
+                
 prop_buscar_OK :: (Eq a, Eq b) => a -> [(a, b)] -> Bool
-prop_buscar_OK x ys = undefined
+prop_buscar_OK x ys = buscarC x ys == buscarP x ys
 
 {-
 
@@ -232,8 +241,7 @@ Realiza las modificaciones necesarias para que se verifique la propiedad.
 -}
 
 valorCartera :: [(String, Double)] -> [(String, Double)] -> Double
-valorCartera cartera mercado = undefined
-
+valorCartera cartera cotizacion = sum [cantidad * valor | (titulo, cantidad) <- cartera, Just valor <- [lookup titulo cotizacion]]
 -------------------------------------------------------------------------------
 -- Ejercicio 12 - concat
 -------------------------------------------------------------------------------
