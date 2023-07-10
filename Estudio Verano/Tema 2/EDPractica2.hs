@@ -167,12 +167,15 @@ desconocida xs = and [ x <= y | (x, y) <- zip xs (tail xs) ]
 -- Usa Hoogle para consultar las funciones 'takeWhile' y 'dropWhile'.
 
 -- 14.a - usando takeWhile y dropWhile
-inserta :: untyped
-inserta = undefined
+inserta :: Ord a => a -> [a] -> [a]
+inserta x xs = takeWhile (<=x) xs ++ [x] ++ dropWhile (<=x) xs
 
 -- 14.b - mediante recursividad
-insertaRec :: untyped
-insertaRec = undefined
+insertaRec :: Ord a => a -> [a] -> [a]
+insertaRec x []     = [x]
+insertaRec x (y:ys)
+            | x <= y = (x:y:ys)
+            | otherwise = y : insertaRec x ys
 
 -- 14.c
 
@@ -180,29 +183,27 @@ insertaRec = undefined
 -- anteriores. Cuando los completes, elimina los guiones del comentario
 -- y comprueba tus funciones.
 
--- prop_inserta :: Ord a => a -> [a] -> Property
--- prop_inserta x xs = desconocida xs ==> desconocida (inserta x xs)
+prop_inserta :: Ord a => a -> [a] -> Property
+prop_inserta x xs = desconocida xs ==> desconocida (inserta x xs)
 
--- prop_insertaRec :: Ord a => a -> [a] -> Property
--- prop_insertaRec x xs = desconocida xs ==> desconocida (insertaRec x xs)
+prop_insertaRec :: Ord a => a -> [a] -> Property
+prop_insertaRec x xs = desconocida xs ==> desconocida (insertaRec x xs)
 
 -- 14.e - usando foldr
-ordena :: untyped
-ordena = undefined
+ordena :: Ord a => [a] -> [a] 
+ordena xs = foldr inserta [] xs
 
--- Para definir prop_ordena_OK tendrás que usar el operador sobre listas (\\).
--- Consulta Hoogle.
-
--- 14.f
-prop_ordena_OK :: untyped
-prop_ordena_OK = undefined
 
 -------------------------------------------------------------------------------
 -- Ejercicio [mezcla] de la lista de ejercicios extra
 -------------------------------------------------------------------------------
 
 mezcla :: Ord a => [a] -> [a] -> [a]
-mezcla  ys = undefined
+mezcla [] ys = ys
+mezcla xs [] = xs
+mezcla (x:xs) (y:ys)
+            | x <= y    = x : mezcla xs (y:ys)
+            | otherwise = y : mezcla (x:xs) ys
 
 
 cotizacion :: [(String, Double)]
