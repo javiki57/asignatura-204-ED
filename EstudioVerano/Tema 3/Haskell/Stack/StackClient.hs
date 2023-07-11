@@ -71,4 +71,5 @@ size s
 -- >>> stack2List pila1
 -- [2,5,7,11]
 stack2List :: Stack a -> [a]
-stack2List s = undefined
+stack2List Empty      = []
+stack2List (Node a n) = a : stack2List n 
