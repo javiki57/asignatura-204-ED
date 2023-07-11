@@ -169,7 +169,10 @@ isEmpty _     = False
 -- >>> isElem 'f' sample
 -- True
 isElem :: Ord a => a -> Set a -> Bool
-isElem = undefined
+isElem x Empty = False
+isElem x (Node a n)
+          | a == x    = True
+          | otherwise = isElem x n 
 
 -- complejidad: O(?)
 -- |
@@ -178,7 +181,11 @@ isElem = undefined
 -- >>> insert 'a' sample
 -- Node 'a' (Node 'c' (Node 'f' (Node 'z' Empty)))
 insert :: Ord a => a -> Set a -> Set a
-insert = undefined
+insert x Empty = Node x Empty
+insert x (Node a n)
+          | x < a     = Node x (Node a n)
+          | x == a    = Node a n
+          | otherwise = Node a (insert x n)  
 
 -- complejidad: O(?)
 -- |
@@ -187,7 +194,10 @@ insert = undefined
 -- >>> delete 'f' sample
 -- Node 'a' (Node 'c' (Node 'z' Empty))
 delete :: Ord a => a -> Set a -> Set a
-delete = undefined
+delete x Empty = Empty
+delete x (Node a n)
+          | x == a    = n
+          | otherwise = Node a (delete x n)
 
 {-
    La siguiente instancia de `Arbitrary` es para enseñar a QuickCheck
