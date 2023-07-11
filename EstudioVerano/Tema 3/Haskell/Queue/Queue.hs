@@ -53,14 +53,15 @@ import           Test.QuickCheck
 -- El tipo algebraico `Queue a` es la representación física de la cola.
 -- Esta representación está **oculta** para que el tipo `Queue a` sea un TAD.
 
-data Queue a = Undefined
+data Queue a = Empty
+            | Node a (Queue a)
              deriving (Eq, Show)
 
 -- Ejercicio: representa una cola `customers` en la que aparezcan del
 -- primero al último los elementos "peter", "mary" y "john".
 
 customers :: Queue String
-customers = undefined
+customers = Node "peter" $ Node "mary" $ Node "john" Empty
 
 -- Ejercicio: ¿Cómo construirías la cola `customers` como cliente del TAD?
 
@@ -69,7 +70,7 @@ customers = undefined
 -- >>> empty
 -- Empty
 empty :: Queue a
-empty = undefined
+empty = Empty
 
 -- Complejidad: O(?)
 -- |
@@ -78,14 +79,16 @@ empty = undefined
 -- >>> isEmpty customers
 -- False
 isEmpty :: Queue a -> Bool
-isEmpty = undefined
+isEmpty Empty = True
+isEmpty _     = False
 
 -- Complejidad: O(?)
 -- |
 -- >>> first customers
 -- "peter"
 first :: Queue a -> a
-first = undefined
+first Empty      = error "Cola vacía"
+first (Node a n) = a
 
 -- Complejidad: O(?)
 -- |
@@ -95,7 +98,8 @@ first = undefined
 -- >>> dequeue (dequeue customers)
 -- Node "john" Empty
 dequeue :: Queue a -> Queue a
-dequeue = undefined
+dequeue Empty      = error "Cola vacía"
+dequeue (Node a n) = n
 
 -- Complejidad: O(?)
 -- |
@@ -105,7 +109,8 @@ dequeue = undefined
 -- >>> enqueue "nicole" (enqueue "frank" customers)
 -- Node "peter" (Node "mary" (Node "john" (Node "frank" (Node "nicole" Empty))))
 enqueue :: a -> Queue a -> Queue a
-enqueue = undefined
+enqueue x Empty      = Node x Empty
+enqueue x (Node a n) = (Node a (enqueue x n)) 
 
 {-
    La siguiente instancia de `Arbitrary` es para enseñar a QuickCheck
