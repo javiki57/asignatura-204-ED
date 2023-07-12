@@ -15,7 +15,9 @@ module Set(Set,
            isEmpty,
            insert,
            isElem,
-           delete
+           delete,
+           primerElemento,
+           foldSet
           ) where
 
 import           Test.QuickCheck
@@ -185,7 +187,8 @@ insert x Empty = Node x Empty
 insert x (Node a n)
           | x < a     = Node x (Node a n)
           | x == a    = Node a n
-          | otherwise = Node a (insert x n)  
+          | otherwise = Node a (insert x n) 
+
 
 -- complejidad: O(?)
 -- |
@@ -199,7 +202,14 @@ delete x (Node a n)
           | x == a    = n
           | otherwise = Node a (delete x n)
 
+primerElemento :: Set a -> a
+primerElemento (Node x _) = x
+
+foldSet :: (a -> b -> b) -> b -> Set a -> b
+foldSet f s Empty = s
+foldSet f s (Node a n) = f a (foldSet f s n)
 {-
+
    La siguiente instancia de `Arbitrary` es para enseñar a QuickCheck
    a generar `Set` aleatorias. No hay que saber cómo hacerlo;
    siempre se facilita.
