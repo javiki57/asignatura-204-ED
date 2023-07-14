@@ -155,10 +155,10 @@ public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> 
                 if(!hasNext()){
                     throw new NoSuchElementException();
                 }
-                T elem = index.elem;
+                T element = index.elem;
                 index = index.next;
 
-                return elem;
+                return element;
             }
         };
     }
