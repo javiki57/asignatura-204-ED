@@ -139,9 +139,9 @@ public class SortedArrayBag<T extends Comparable<? super T>> implements Bag<T> {
             if(occurrences(item) > 1) count[index]--;
 
             else{
-                for(int i = index; i<=nextFree-1 ; i++){
-                    value[i+1] = value[i];
-                    count[i+1] = count[i];
+                for (int i = index; i < nextFree - 1; i++) {
+                    value[i] = value[i + 1];
+                    count[i] = count[i + 1];
                 }
                 nextFree--;
                 size--;

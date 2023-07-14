@@ -13,8 +13,8 @@ public class BagClient {
     public static void main(String[] args) {
 
         // choose implementation to test
-        Bag<Character> b = new SortedLinkedBag<>();
-        // Bag<Character> b = new SortedArrayBag<>();
+       // Bag<Character> b = new SortedLinkedBag<>();
+         Bag<Character> b = new SortedArrayBag<>();
 
         @SuppressWarnings("unused")
         String cervantes = """
