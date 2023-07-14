@@ -37,35 +37,97 @@ public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> 
     private int size;
 
     public SortedLinkedBag() {
-        // TODO
+        first = null;
+        size = 0;
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO
-        return false;
+
+        return size == 0;
     }
 
     @Override
     public int size() {
-        // TODO
-        return 0;
+
+        return size;
     }
 
     @Override
     public void insert(T x) {
-        // TODO
+
+        if(first == null){
+           first = new Node<>(x,null);
+        }else{
+
+            Node<T> current = first;
+            Node<T> previous = null;
+
+            while(current != null && x.compareTo(current.elem)>0) {
+
+                previous = current;
+                current = current.next;
+            }
+
+            if(current != null && x.equals(current.elem)){
+                current.count++;
+
+            }else{
+                Node<T> nuevo = new Node<>(x, current);
+
+                if(previous == null) {
+                    first = nuevo;
+
+                }else{
+                    previous.next = nuevo;
+                }
+                size ++;
+            }
+        }
     }
 
     @Override
     public int occurrences(T x) {
-        // TODO
+        Node<T> current = first;
+
+        while(current != null && x.compareTo(current.elem)>0){
+            current = current.next;
+        }
+
+        if (current != null && x.equals(current.elem)) {
+            return current.count;
+        }
+
         return 0;
+
     }
 
     @Override
     public void delete(T x) {
-        // TODO
+        Node<T> current = first;
+        Node<T> previous = null;
+
+        while(current != null && x.compareTo(current.elem)>0){
+            previous = current;
+            current = current.next;
+        }
+
+        if(current != null && x.equals(current.elem)){
+
+            if(occurrences(current.elem)>1){
+                current.count--;
+
+            }else{
+
+                if(previous == null){
+                    first = current.next;
+
+                }else{
+                    previous.next=current.next;
+                }
+                size--;
+            }
+        }
     }
 
     @Override
