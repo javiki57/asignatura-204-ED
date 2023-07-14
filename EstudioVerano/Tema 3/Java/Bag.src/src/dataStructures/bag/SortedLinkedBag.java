@@ -1,6 +1,7 @@
 package dataStructures.bag;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 
 public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> {
@@ -142,6 +143,23 @@ public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> 
     @Override
     public Iterator<T> iterator() {
         // TODO
-        return null;
+        return new Iterator<T>() {
+            Node<T> index = first;
+            @Override
+            public boolean hasNext() {
+                return index != null;
+            }
+
+            @Override
+            public T next() {
+                if(!hasNext()){
+                    throw new NoSuchElementException();
+                }
+                T elem = index.elem;
+                index = index.next;
+
+                return elem;
+            }
+        };
     }
 }
