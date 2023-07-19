@@ -95,13 +95,42 @@ public class BinTree<T> {
     }
 
     public boolean isElem(T x) {
-        // TODO
-        return false;
+
+        return isElem(x,root);
+    }
+
+    private boolean isElem (T x, Tree<T> node){
+        if (node == null) {
+            return false;
+        } else if (node.elem.equals(x)) {
+            return true;
+        } else {
+            return isElem(x,node.right) || isElem(x, node.left);
+        }
     }
 
     public List<T> atLevel(int i) {
-        // TODO
-        return null;
+        List<T> lista = new LinkedList<>();
+        int treeHeight = height();
+
+        if (i <= treeHeight) {
+            atLevel(root, i,0, lista);
+        }
+        return lista;
+    }
+
+    private void atLevel(Tree<T> node, int targetLevel, int currentLevel, List<T> levelElements) {
+        if (node != null) {
+
+            if (currentLevel == targetLevel) {
+                levelElements.append(node.elem);
+                return;
+            }
+
+            atLevel(node.left, targetLevel, currentLevel + 1, levelElements);
+            atLevel(node.right, targetLevel, currentLevel + 1, levelElements);
+        }
+
     }
 
     public List<T> inOrder() {
