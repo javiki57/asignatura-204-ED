@@ -77,9 +77,9 @@ public class HeapSort {
     public static void main(String[] args) {
         tests(new BinaryHeap<>(), "BinaryHeap<Integer>" );
         tests(new WBLeftistHeap<>(), "WeigthBiasedLeftistHeap<Integer>");
-        tests(new MaxiphobicHeap<>(),"MaxiphobicHeap<Integer>");
-        tests(new SkewHeap<>(),"SkewHeap<Integer>");
-        tests(new PairingHeap<>(),"PairingHeap<Integer>");
+     //   tests(new MaxiphobicHeap<>(),"MaxiphobicHeap<Integer>");
+      //  tests(new SkewHeap<>(),"SkewHeap<Integer>");
+      //  tests(new PairingHeap<>(),"PairingHeap<Integer>");
     }
 
 }
