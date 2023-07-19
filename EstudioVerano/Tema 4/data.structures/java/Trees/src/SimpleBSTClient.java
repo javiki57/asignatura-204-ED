@@ -5,7 +5,6 @@
   Pablo López
 */
 
-import busqueda.SimpleBST;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
