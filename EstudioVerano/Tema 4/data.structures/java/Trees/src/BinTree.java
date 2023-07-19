@@ -5,7 +5,6 @@
   Pablo López
 */
 
-package binarios;
 
 import dataStructures.list.LinkedList;
 import dataStructures.list.List;
@@ -43,18 +42,56 @@ public class BinTree<T> {
     }
 
     public int weight() {
-        // TODO
-        return 0;
+
+        return weight(root);
+    }
+    private int weight(Tree<T> arbol){
+
+        if(arbol == null){
+            return 0;
+        }else{
+            int leftWeight = 1 + weight(arbol.left);
+            int rightWeight = 1 + weight(arbol.right);
+            return leftWeight + rightWeight + 1;
+        }
+
     }
 
     public int height() {
-        // TODO
-        return 0;
+
+        return height(root);
+    }
+
+    private int height(Tree<T> arbol){
+        if(arbol == null){
+            return 0;
+        }else{
+            int leftHeight = height(arbol.left);
+            int rightHeight = height(arbol.right);
+            return Math.max(leftHeight, rightHeight) + 1;
+
+        }
     }
 
     public List<T> border() {
-        // TODO
-        return null;
+        List<T> lista = new LinkedList<>();
+        border(root, lista);
+        return lista;
+    }
+
+    private void border(Tree<T> arbol, List<T> lista){
+        if(arbol != null){
+
+            if(isLeaf(arbol)){
+                lista.append(arbol.elem);
+
+            }else{
+                border(arbol.right,lista);
+                border(arbol.left,lista);
+            }
+
+        }
+
     }
 
     public boolean isElem(T x) {

@@ -5,7 +5,7 @@
   Pablo López
 */
 
-import binarios.BinTree;
+
 import dataStructures.list.ArrayList;
 import dataStructures.list.List;
 
