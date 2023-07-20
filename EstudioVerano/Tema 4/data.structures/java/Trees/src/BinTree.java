@@ -134,8 +134,17 @@ public class BinTree<T> {
     }
 
     public List<T> inOrder() {
-        // TODO
-        return null;
+        List<T> lista = new LinkedList<>();
+        inOrder(root,lista);
+        return lista;
+    }
+
+    private void inOrder(Tree<T> node, List<T> lista){
+        if(node != null){
+            inOrder(node.left,lista);
+            lista.append(node.elem);
+            inOrder(node.right,lista);
+        }
     }
 
     /**
