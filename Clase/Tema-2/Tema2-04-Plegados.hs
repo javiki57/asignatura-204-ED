@@ -162,7 +162,11 @@ borraTodas x (y:ys) = f y (borraTodas x ys)
 -- Ejercicio: Define la funcion borraTodas usando `foldr`
 
 borraTodasP :: Eq a => a -> [a] -> [a]
-borraTodasP = undefined
+borraTodasP x ys = foldr f [] ys
+  where
+    f y solCola
+      | y == x    = solCola
+      | otherwise = y : solCola
 
 -- | 15. Plegado a la izquierda (foldl)
 ------------------------------------------------------------
