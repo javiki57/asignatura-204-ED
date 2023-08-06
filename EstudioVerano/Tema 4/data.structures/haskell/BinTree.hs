@@ -85,25 +85,30 @@ rightChild (NodeB _ _ r) = r
 -- >>> sumB tree2
 -- 21
 sumB :: Num a => TreeB a -> a
-sumB = undefined
+sumB EmptyB = 0
+sumB (NodeB a l r) = a + sumB l + sumB r
 
 -- | peso (número de nodos) de un árbol binario
 -- >>> weightB tree2
 -- 6
 weightB :: TreeB a -> Int
-weightB = undefined
+weightB EmptyB = 0
+weightB (NodeB a l r) = 1 + weightB l + weightB r
 
 -- | altura (número de niveles) de un árbol binario
 -- >>> heightB tree2
 -- 3
 heightB :: (Ord a, Num a) => TreeB t -> a
-heightB = undefined
+heightB EmptyB = 0
+heightB (NodeB a l r) = 1 + max (heightB l) (heightB r)
 
 -- | frontera (conjunto de nodos hoja) de un árbol binario
 -- >>> borderB tree2
 -- [4,5,6]
 borderB :: TreeB a -> [a]
-borderB = undefined
+borderB EmptyB = []
+borderB (NodeB a EmptyB EmptyB) = [a]
+borderB (NodeB a l r) = borderB l ++ borderB r
 
 -- | comprobar si 'x' es elemento de un árbol binario
 -- >>> isElemB 3 tree2
@@ -111,7 +116,8 @@ borderB = undefined
 -- >>> isElemB 30 tree2
 -- False
 isElemB :: Eq a => a -> TreeB a -> Bool
-isElemB = undefined
+isElemB _ EmptyB = False
+isElemB x (NodeB a l r ) = x == a || isElemB x l || isElemB x r
 
 -- | nodos en el nivel 'i' de un árbol binario
 -- >>> atLevelB 0 tree2
@@ -123,7 +129,9 @@ isElemB = undefined
 -- >>> atLevelB 3 tree2
 -- []
 atLevelB :: Integer -> TreeB a -> [a]
-atLevelB = undefined
+atLevelB x EmptyB = []
+atLevelB 0 (NodeB a l r) = [a]
+atLevelB x (NodeB a l r) = atLevelB (x-1) l ++ atLevelB (x-1) r
 
 -- | caminos hasta el nodo 'x' en un árbol binario
 -- >>> pathsToB 5 tree3
@@ -133,17 +141,24 @@ atLevelB = undefined
 -- >>> pathsToB 9 tree3
 -- []
 pathsToB :: Eq a => a -> TreeB a -> [[a]]
-pathsToB = undefined
+pathsToB x EmptyB = []
+pathsToB x (NodeB a l r)
+        | x == a    = [[x]]
+        | otherwise = map (a: ) (pathsToB x l) ++ map (a: ) (pathsToB x r)
 
 -- | caminos exhaustivos hasta el nodo 'x' en un árbol binario
 -- | caminos exhaustivos hasta el nodo 'x' en un árbol binario
 -- >>> pathsToB2 30 tree5
 -- [[10,20,30],[10,20,30],[10,30],[10,30,20,30]]
 pathsToB2 :: (Eq a) => a -> TreeB a -> [[a]]
-pathsToB2 = undefined
+pathsToB2 x EmptyB = []
+pathsToB2 x (NodeB a l r)
+        | x == a    = [[x]]
+        | otherwise = map (a:) (pathsToB2 x l) ++ map (a:) (pathsToB2 x r) ++ (pathsToB2 a l) ++ (pathsToB2 a r)
 
 -- | recorrido inorden de un árbol binario
 -- >>> inOrderB tree4
 -- [4,2,5,1,6,3,7]
 inOrderB :: TreeB a -> [a]
-inOrderB = undefined
+inOrderB EmptyB = []
+inOrderB (NodeB a l r) = inOrderB l ++ [a] ++ inOrderB r
