@@ -48,13 +48,24 @@ treeSort :: Ord a => [a] -> [a]
 treeSort xs = (inOrder . mkBST) xs
 
 empty :: BST a
-empty = undefined
+empty = Empty
 
 insert :: Ord a => a -> BST a -> BST a
-insert = undefined
+insert x Empty = Node x Empty Empty
+insert x (Node a l r)
+        | x < a     = Node a (insert x l) r
+        | x == a    = Node x l r
+        | otherwise = Node a l (insert x r)
 
 search :: Ord a => a -> BST a -> Maybe a
-search = undefined
+search x Empty = Nothing
+search x (Node a l r)
+        | x == a    = Just a
+        | x < a     = search x l
+        | otherwise = search x r
+
 
 isElem :: Ord a => a -> BST a -> Bool
-isElem = undefined
+isElem x tree = case search x tree of 
+        Just _  -> True
+        Nothing -> False 
