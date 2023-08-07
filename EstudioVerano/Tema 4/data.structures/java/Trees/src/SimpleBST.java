@@ -24,21 +24,98 @@ public class SimpleBST<K extends Comparable<? super K>, V> {
     private Tree<K, V> root;
 
     public SimpleBST() {
-        // TODO
+        root = null;
     }
 
     public void insert(K k, V v) {
-        // TODO
+        root = insertRec(root, k, v);
+    }
+
+    private Tree<K,V> insertRec(Tree<K,V> node, K k, V v){
+
+        if(node == null){
+            return new Tree<>(k,v,null,null);
+        }
+
+        if(k.compareTo(node.key) < 0){
+               node.left = insertRec(node.left, k ,v);
+
+        }else if(k.compareTo(node.key) > 0){
+               node.right = insertRec(node.right, k, v);
+
+        }else{
+               node.value = v;
+        }
+
+        return node;
     }
 
     public V search(K k) {
-        // TODO
-        return null;
+
+        return searchRec(root, k);
+    }
+
+    private V searchRec (Tree<K,V> node, K k){
+
+        if(node == null){
+            return null;
+        }
+
+        if(k.compareTo(node.key) == 0){
+
+            return node.value;
+
+        }else if(k.compareTo(node.key) < 0){
+
+            return searchRec(node.left, k);
+
+        }else{
+
+            return searchRec(node.right, k);
+        }
+
     }
 
     public void delete(K k) {
-        // TODO
+        root = deleteRec(root, k);
     }
+
+    private Tree<K,V> deleteRec(Tree<K,V> node, K k){
+        if(node == null){
+            return null;
+        }
+
+        if(k.compareTo(node.key) < 0){
+            node.left = deleteRec(node.left, k);
+        }else if(k.compareTo(node.key) > 0){
+            node.right = deleteRec(node.right, k);
+        }else{
+            if(node.left == null){
+                return node.right;
+            }else if (node.right == null){
+                return node.left;
+            }else{
+
+                K key = findKey(node.right);
+                V valor = search(k);
+
+                node.key = key;
+                node.value = valor;
+                node.right = deleteRec(node.right,key);
+
+            }
+        }
+        return node;
+    }
+
+    private K findKey(Tree<K,V> node){
+        while(node.left != null){
+            node = node.left;
+        }
+        return node.key;
+    }
+
+
     /**
      * Returns representation of tree as a String.
      */

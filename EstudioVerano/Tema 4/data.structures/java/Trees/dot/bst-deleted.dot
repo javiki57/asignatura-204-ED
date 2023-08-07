@@ -1,0 +1,9 @@
+digraph "bst-deleted" {
+node [fontname="Arial", fontcolor=red, shape=circle, style=filled, color="#66B268", fillcolor="#AFF4AF" ];
+edge [color = "#0070BF"];
+214126413 [label="6"];
+214126413 -> 1237514926;
+1237514926 [label="2"];
+214126413 -> 492228202;
+492228202 [label="10"];
+}
