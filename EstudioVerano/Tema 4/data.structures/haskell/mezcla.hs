@@ -19,4 +19,8 @@
 
 -- con patrón alias
 mezcla :: Ord a => [a] -> [a] -> [a]
-mezcla = undefined
+mezcla xs [] = xs
+mezcla [] ys = ys
+mezcla (x:xs) (y:ys)
+    | x <= y    = x : (mezcla xs (y:ys))
+    | otherwise = y : (mezcla (x:xs) ys)
