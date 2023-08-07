@@ -71,17 +71,18 @@ t1 = mkBST [6, 5, 7, 3, 4, 10, 8]
 
 -- |
 -- >>> sumBST t0
--- 2
+-- 3
 -- >>> sumBST t1
 -- 43
 sumBST :: Num b => BST b -> b
-sumBST = undefined
+sumBST tree = foldInOrder (+) 0 tree
 
 -- |
 -- >>> weightBST t1
 -- 7
 weightBST :: BST a -> Integer
-weightBST = undefined
+weightBST tree = foldInOrder (\_ acc -> 1 + acc) 0 tree
+
 
 -- |
 -- >>> maxBST t0
@@ -89,16 +90,28 @@ weightBST = undefined
 -- maxBST empty
 -- Nothing
 maxBST :: Ord a => BST a -> Maybe a
-maxBST = undefined
+maxBST tree = foldInOrder f Nothing tree
+      where
+        f x acc = case acc of
+          Nothing -> Just x
+          Just y  -> Just (max x y)
 
 -- |
 -- >>> evenBST t1
 -- [6,4,10,8]
 evenBST :: Integral a => BST a -> [a]
-evenBST = undefined
+evenBST tree = foldInOrder f [] tree
+    where
+      f x xs
+        | even x   = x:xs
+        |otherwise = xs
 
 -- |
 -- >>> filterBST odd t1
 -- [5,3,7]
 filterBST :: (a->Bool) -> BST a -> [a]
-filterBST = undefined
+filterBST p tree = foldPreOrder f [] tree
+    where
+      f x acc
+        | p x       = x:acc
+        | otherwise = acc   
