@@ -77,8 +77,18 @@ delMin (Node _ _ lh rh) = merge lh rh
 -}
 
 -- recursively merges smallest subheaps. Achieves O(log n) complexity
+
+-- firulo este método
 merge :: (Ord a) => Heap a -> Heap a -> Heap a
-merge = undefined
+merge t Empty = t
+merge Empty t = t
+merge n1@(Node a s l1 r1) n2@(Node b t l2 r2)
+          | a <= b    = makenode a (merge n2 r1) l1
+          | otherwise = makenode b (merge n1 r2) l2
+      where
+        makenode x l r
+              | size l >= size r = Node x (1 + size l + size r) l r
+              | otherwise        = Node x (1 + size l + size r) r l
 
 ----------------------------------------------------------
 -- ^^^^^^^^^^^^^^-- SOLO TOCAR ARRIBA ^^^^^^^^^^^ --------
