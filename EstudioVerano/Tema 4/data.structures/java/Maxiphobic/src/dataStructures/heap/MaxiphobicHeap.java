@@ -8,6 +8,8 @@ package dataStructures.heap;
 
 // Solo tienes que completar el método merge.
 
+import java.util.ArrayList;
+
 /**
  * Heap implemented using maxiphobic heap-ordered binary trees.
  *
@@ -68,8 +70,45 @@ public class MaxiphobicHeap<T extends Comparable<? super T>> implements Heap<T> 
     */
 
     private static <T extends Comparable<? super T>> Tree<T> merge(Tree<T> h1, Tree<T> h2) {
-        // TODO
-        return null;
+
+        if(h1 == null){
+            return h2;
+        }
+
+        if(h2 == null){
+            return h1;
+        }
+
+        if(h1.elem.compareTo(h2.elem) <= 0){
+            ArrayList<Tree<T>> array = ganadorYPerdedor(h1.left, h1.right, h2);
+            return new Tree<>(h1.elem, array.get(0), merge(array.get(1), array.get(2)));
+
+        }else{
+            ArrayList<Tree<T>> array2 = ganadorYPerdedor(h2.left, h2.right, h1);
+            return new Tree<>(h2.elem, array2.get(0), merge(array2.get(1), array2.get(2)));
+
+        }
+
+    }
+
+
+    public static <T extends Comparable<? super T>> ArrayList<Tree<T>> ganadorYPerdedor(Tree<T> t1, Tree<T> t2, Tree<T> t3){
+        ArrayList<Tree<T>> lista = new ArrayList<>();
+        lista.add(t1); lista.add(t2); lista.add(t3);
+        // lista.sort((o1, o2) -> o2.compareTo(o1));
+        lista.sort((o1, o2) -> {
+            if(o2 == null){
+                return -1;
+            }else if(o1 == null){
+                return 1;
+            }else if (o2.size >= o1.size){
+                return 1;
+            }else{
+                return -1;
+            }
+        });
+
+        return lista;
     }
 
     /**

@@ -68,8 +68,42 @@ public class MaxiphobicHeapEfficient<T extends Comparable<? super T>> implements
     */
 
     private static <T extends Comparable<? super T>> Tree<T> merge(Tree<T> h1, Tree<T> h2) {
-        // TODO
-        return null;
+        if(h1 == null) return h2;
+        if(h2 == null) return h1;
+
+        //Escogemos primeramente la raiz
+        Tree<T> rootHeap = h1.elem.compareTo(h2.elem) <= 0 ? h1 : h2;
+        //Escogemos el arbol de amvos con la mayor clave
+        Tree<T> h_key = h1.elem.compareTo(h2.elem) <= 0 ? h2 : h1;
+        //Nos guardamos los hijos del arbol perdedor
+        Tree<T> ll = h1.elem.compareTo(h2.elem) <= 0 ? h1.left : h2.left;
+        Tree<T> rr = h1.elem.compareTo(h2.elem) <= 0 ? h1.right : h2.right;
+
+        //Para evitar si uno de los hijos guardados era nulo o eran hojas
+        int ll_s = ll == null ? 0 : ll.size;
+        int rr_s = rr == null ? 0 : rr.size;
+
+        // Una vez hemos guardado los 3 árboles, nos quedamos con el que pesa más de ellos
+        Tree<T> t1,t2,t3;
+
+        if(ll_s >= h_key.size && ll_s >= rr_s){
+            t1 = ll;
+            t2 = rr;
+            t3 = h_key;
+        }else if(ll_s >= h_key.size && rr_s >= ll_s){
+            t1 = rr;
+            t2 = ll;
+            t3 = h_key;
+        }else{
+            t1 = h_key;
+            t2 = ll;
+            t3 = rr;
+        }
+
+        rootHeap.left = t1;
+        rootHeap.right = merge(t2,t3);
+
+        return new Tree<>(rootHeap.elem, rootHeap.left,rootHeap.right);
     }
 
     /**
