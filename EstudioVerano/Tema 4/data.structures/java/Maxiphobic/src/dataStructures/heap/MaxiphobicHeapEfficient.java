@@ -73,7 +73,7 @@ public class MaxiphobicHeapEfficient<T extends Comparable<? super T>> implements
 
         //Escogemos primeramente la raiz
         Tree<T> rootHeap = h1.elem.compareTo(h2.elem) <= 0 ? h1 : h2;
-        //Escogemos el arbol de amvos con la mayor clave
+        //Escogemos el arbol de ambos con la mayor clave
         Tree<T> h_key = h1.elem.compareTo(h2.elem) <= 0 ? h2 : h1;
         //Nos guardamos los hijos del arbol perdedor
         Tree<T> ll = h1.elem.compareTo(h2.elem) <= 0 ? h1.left : h2.left;
