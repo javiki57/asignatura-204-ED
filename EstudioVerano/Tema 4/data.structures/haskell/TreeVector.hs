@@ -46,7 +46,13 @@ data BinTree a = Leaf a
 
 -}
 
-vector = undefined
+vector :: Int -> a -> Vector a
+vector n x
+      | n < 0     = error "negative exponent"
+      | otherwise = TreeVector (2^n) (generateTree n x)
+    where
+      generateTree 0 x = Leaf x
+      generateTree d x = Node (generateTree (d - 1) x) (generateTree (d - 1) x)
 
 -- | Exercise b. size
 
@@ -60,7 +66,8 @@ vector = undefined
 
 -}
 
-size = undefined
+size :: Vector a -> Int
+size (TreeVector n t) = n
 
 -- | Exercise c. get
 
@@ -81,7 +88,15 @@ size = undefined
 
 -}
 
-get = undefined
+get :: Int -> Vector a -> a
+get i (TreeVector n t)
+      | i >= n    = error " index out of bounds"
+      | otherwise = f i t
+    where
+      f i (Leaf a) = a
+      f i (Node l r)
+          | even i    = f (n `div` 2) l
+          | otherwise = f (n `div` 2) r
 
 -- | Exercise d. set
 
@@ -123,7 +138,16 @@ get = undefined
 
 -}
 
-set = undefined
+set :: Int -> a -> Vector a -> Vector a
+set i x (TreeVector s t)
+        | i >= s = error "index out of bounds"
+        | otherwise = TreeVector s (f i x t)
+      where
+        f a b (Leaf x) = Leaf b
+        f a b (Node l r)
+              | even a    = Node (f (a `div` 2) b l) r
+              | otherwise = Node l (f (a `div` 2) b r)
+            
 
 -- | Exercise e. mapVector
 
@@ -147,7 +171,11 @@ set = undefined
 
 -}
 
-mapVector = undefined
+mapVector :: (a -> b) -> Vector a -> Vector b
+mapVector f (TreeVector s t) = TreeVector s (funcion f t)
+    where
+      funcion f (Leaf x) = Leaf (f x)
+      funcion f (Node l r) = Node (funcion f l) (funcion f r)
 
 -- | Exercise f. intercalate
 
@@ -164,7 +192,10 @@ mapVector = undefined
 
 -}
 
-intercalate = undefined
+intercalate :: [a] -> [a] -> [a]
+intercalate [] _ = []
+intercalate _ [] = []
+intercalate (x:xs) (y:ys) = x : y : intercalate xs ys
 
 -- | Exercise g. toList
 
@@ -178,7 +209,12 @@ intercalate = undefined
 
 -}
 
-toList = undefined
+toList :: Vector a -> [a]
+toList (TreeVector s t) = f t
+      where
+        f (Leaf x) = [x]
+        f (Node l r) = intercalate (f l) (f r)
+
 
 -- | Exercise h. Complexity
 
@@ -214,7 +250,10 @@ False
 
 -}
 
-isPowerOfTwo = undefined
+isPowerOfTwo :: Int -> Bool
+isPowerOfTwo n
+      | n <= 0    = error "Número negativo"
+      | otherwise = mod n 2 == 0
 
 -- | Exercise j. fromList
 
@@ -240,8 +279,17 @@ isPowerOfTwo = undefined
 
 -}
 
-fromList = undefined
+fromList :: [a] -> Vector a
+fromList l
+    | not (isPowerOfTwo (length l)) = error "Tamaño de la lista erróneo"
+    | otherwise = TreeVector (length l) (f l)
 
+    where
+      f [x] = Leaf x
+      f l   = Node (f left) (f right)
+      
+        where
+          (left, right) = splitAt (length l `div` 2) l
 -------------------------------------------------------------------------------
 -- Do not write any code below
 -------------------------------------------------------------------------------
