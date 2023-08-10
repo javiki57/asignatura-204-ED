@@ -36,13 +36,11 @@ empty = Empty
 
 -- | = Exercise b - isEmpty
 isEmpty :: Trie a -> Bool
-isEmpty (Node x sig) = isNothing x && D.isEmpty sig
+isEmpty = undefined 
 
 -- | = Exercise c - sizeValue
 sizeValue :: Maybe a -> Int
-sizeValue a
-  | isNothing a = 0
-  | otherwise   = 1
+sizeValue =undefined
 
 -- | = Exercise d - size
 size :: Trie a -> Int
