@@ -10,6 +10,7 @@ package dataStructures.trie;
 
 import dataStructures.dictionary.AVLDictionary;
 import dataStructures.dictionary.Dictionary;
+import dataStructures.list.ArrayList;
 import dataStructures.list.LinkedList;
 import dataStructures.list.List;
 import dataStructures.tuple.Tuple2;
@@ -35,57 +36,105 @@ public class DictionaryStringTrie<V> {
 
   // | = Exercise a - constructor
   public DictionaryStringTrie() {
-    // TODO
+    root = new Node<>();
+
   }
 
   // | = Exercise b - isEmpty
   public boolean isEmpty() {
-    // TODO
-    return false;
+
+    return root == null;
   }
 
   // | = Exercise c - sizeValue
   protected static <V> int sizeValue(V value) {
-    // TODO
-    return 0;
+
+    return (value == null) ? 0 : 1;
   }
 
   // | = Exercise d - size
   public int size() {
-    // TODO
-    return 0;
+
+    return size(root);
   }
 
+
+
   protected static <V> int size(Node<V> node) {
-    // TODO
-    return 0;
+      if(node == null){
+          return 0;
+      }else{
+          int i = sizeValue(node.value);
+
+          for(Character c : node.children.keys()){
+              i += size(node.children.valueOf(c));
+          }
+          return i;
+      }
   }
 
   // | = Exercise e - childOf
   protected static <V> Node<V> childOf(char c, Node<V> node) {
-    // TODO
-    return null;
+    if(node == null || !node.children.isDefinedAt(c)){
+        return null;
+
+    }else{
+        return node.children.valueOf(c);
+
+    }
+
   }
 
   // | = Exercise f - search
   public V search(String str) {
-    // TODO
-    return null;
+
+    return search(str, root);
   }
 
   protected static <V> V search(String str, Node<V> node) {
-    // TODO
-    return null;
+    if(node == null){
+        return null;
+
+    }else{
+        if(str.isEmpty()) return node.value;
+        else{
+            char c = str.charAt(0);
+            String suffix = str.substring(1);
+            return search(suffix, childOf(c,node));
+        }
+    }
+
   }
 
   // | = Exercise g - insert
   public void insert(String str, V value) {
-    // TODO
+    root = insert(str, value, root);
   }
 
   protected static <V> Node<V> insert(String str, V value, Node<V> node) {
-    // TODO
-    return null;
+    if(node == null){
+
+        return new Node<>();
+
+    }else{
+        if(str.isEmpty()) node.value = value;
+        else{
+            char c = str.charAt(0);
+            String suffix = str.substring(1);
+            Node<V> childnode = childOf(c,node);
+
+            if(childnode == null){
+                childnode = new Node<>();
+                node.children.insert(c, childnode);
+            }
+
+            Node<V> newChild = insert(suffix, value,childnode);
+            node.children.insert(c,newChild);
+
+        }
+        return node;
+    }
+
   }
 
   /*****************************************************************************
@@ -94,14 +143,32 @@ public class DictionaryStringTrie<V> {
 
   // | = Exercise e1 - strings
   public List<String> strings() {
-    // TODO
-    return null;
+
+    return strings(root);
   }
 
   protected static <V> List<String> strings(Node<V> node) {
-    // TODO
-    return null;
+      List<String> result = new ArrayList<>();
+      strings(node, new StringBuilder(), result);
+      return result;
   }
+
+  protected static <V> void strings(Node<V> node, StringBuilder currentWord, List<String> result) {
+    if (node == null) {
+        return;
+    }
+
+    if (node.value != null) {
+        result.append(currentWord.toString());
+    }
+
+    for (Character c : node.children.keys()) {
+        StringBuilder newWord = new StringBuilder(currentWord);
+        newWord.append(c);
+        strings(node.children.valueOf(c), newWord, result);
+    }
+ }
+
 
   // | = Exercise e2 - fromList
   public static DictionaryStringTrie<Integer> fromList(List<String> list) {
