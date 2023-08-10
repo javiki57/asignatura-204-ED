@@ -36,36 +36,56 @@ empty = Empty
 
 -- | = Exercise b - isEmpty
 isEmpty :: Trie a -> Bool
-isEmpty = undefined 
+isEmpty Empty = True
+isEmpty _     = False 
 
 -- | = Exercise c - sizeValue
 sizeValue :: Maybe a -> Int
-sizeValue =undefined
+sizeValue s = case s of
+      Nothing -> 0
+      Just x  -> 1
+
 
 -- | = Exercise d - size
 size :: Trie a -> Int
-size = undefined
+size Empty = 0
+size (Node a dic) = sizeValue a + sum (map size (D.values dic))
+
 
 -- | = Exercise e - toTrie
 toTrie :: Maybe (Trie a) -> Trie a
-toTrie = undefined
+toTrie t = case t of
+      Nothing -> Empty
+      Just x  -> x
+
 
 -- | = Exercise f - childOf
 childOf :: Char -> Trie a -> Trie a
-childOf = undefined 
+childOf _ Empty = Empty
+childOf c (Node a dic)
+      | not(D.isDefinedAt c dic) = Empty
+      | otherwise                = toTrie (D.valueOf c dic)
 
 
 -- | = Exercise g - search
 search :: String -> Trie a -> Maybe a
-search = undefined
+search _ Empty               = Nothing
+search "" (Node a dic)       = a
+search (c:cs) t@(Node a dic) = search cs (childOf c t)
+
 
 -- | = Exercise h - update
 update :: Trie a -> Char -> Trie a -> Trie a
-update = undefined
+update Empty c child        = Node Nothing (D.insert c child D.empty)
+update (Node a dic) c child = Node a (D.insert c child dic)
+
 
 -- | = Exercise i - insert
 insert :: String -> a -> Trie a -> Trie a
-insert = undefined
+insert "" v Empty              = Node (Just v) D.empty
+insert "" v (Node a dic)       = Node (Just v) dic
+insert (c:cs) v Empty          = insert cs v (childOf c Empty)
+insert (c:cs) v t@(Node a dic) = let child = insert cs v (childOf c t) in Node a (D.insert c child dic)
 
 -------------------------------------------------------------------------------
 -- ONLY FOR PART TIME STUDENTS ------------------------------------------------
@@ -73,11 +93,22 @@ insert = undefined
 
 -- | = Exercise e1 - strings
 strings :: Trie a -> [String]
-strings t = undefined
+strings Empty = []
+strings t@(Node a dic) = 
+  let currentWords = case a of
+       Nothing -> []
+       Just _ -> [""]
+      childStrings = concatMap (\(c, child) -> map (c :) (strings child)) (D.keysValues dic)
+  in currentWords ++ childStrings
 
 -- | = Exercise e2 - fromList
+-- Firula esta implementación, no se si funciona bien
 fromList :: [String] -> Trie Int
-fromList xs = undefined
+fromList xs = foldr f Empty xs
+    where
+      f w t = case search w t of
+        Just count -> insert w (count+1) t
+        Nothing    -> insert w 1 t
 
 -------------------------------------------------------------------------------
 -- DO NOT WRITE ANY CODE BELOW ------------------------------------------------
