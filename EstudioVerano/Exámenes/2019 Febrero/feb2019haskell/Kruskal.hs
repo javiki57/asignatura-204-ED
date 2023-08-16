@@ -18,7 +18,7 @@ import qualified DataStructures.PriorityQueue.LinearPriorityQueue as Q
 import DataStructures.Graph.DictionaryWeightedGraph
 
 kruskal :: (Ord a, Ord w) => WeightedGraph a w -> [WeightedEdge a w]
-kruskal = undefined
+kruskal g = undefined
 
 -- Solo para evaluación continua / only for part time students
 kruskals :: (Ord a, Ord w) => WeightedGraph a w -> [[WeightedEdge a w]]

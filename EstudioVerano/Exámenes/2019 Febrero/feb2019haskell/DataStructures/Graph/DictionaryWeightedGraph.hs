@@ -47,16 +47,22 @@ empty :: WeightedGraph a w
 empty = WG D.empty
 
 addVertex :: (Ord a) => WeightedGraph a w -> a -> WeightedGraph a w
-addVertex = undefined
+addVertex (WG d) v = WG (D.insert v D.empty d)
 
 addEdge :: (Ord a, Show a) => WeightedGraph a w -> a -> a -> w -> WeightedGraph a w
-addEdge = undefined
+addEdge g@(WG d) v1 v2 w
+          | not(D.isDefinedAt v1 d) || not(D.isDefinedAt v2 d) = error "Los vértices no están definidos."
+          | otherwise = WG (D.insert v1 (D.insert v2 w D.empty) d)
 
 edges :: (Eq a, Eq w) => WeightedGraph a w -> [WeightedEdge a w]
-edges  = undefined
+edges (WG d) = concatMap extractEdges (D.keysValues d)
+    where
+      extractEdges (v1, suc) = map (\(v2,w) -> WE v1 w v2) (D.keysValues suc)
 
 successors :: (Ord a, Show a) => WeightedGraph a w -> a -> [(a,w)]
-successors  = undefined
+successors (WG d) v1 = case D.valueOf v1 d of
+        Nothing     -> error "El vértice no pertenece al grafo."
+        Just succ -> D.keysValues succ
 
 
 -- NO EDITAR A PARTIR DE AQUÍ    

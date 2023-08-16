@@ -15,6 +15,7 @@
 package dataStructures.graph;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 import dataStructures.dictionary.Dictionary;
 import dataStructures.dictionary.HashDictionary;
@@ -53,24 +54,22 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
         }
 
 		public int hashCode() {
-			
-			// COMPLETAR 
-			
-			return 0;
+
+			return Objects.hash(src, dst, wght);
 		}
 
 		public boolean equals(Object obj) {
-			
-			// COMPLETAR 
-			
-			return false;
+            if (this == obj)
+                return true;
+            if (obj == null || getClass() != obj.getClass())
+                return false;
+            WE<?, ?> we = (WE<?, ?>) obj;
+            return Objects.equals(src, we.src) && Objects.equals(dst, we.dst) && Objects.equals(wght, we.wght);
 		}
 		
 		public int compareTo(WeightedEdge<V1, W1> o) {
 
-			// COMPLETAR
-			
-			return 0;
+			return wght.compareTo(o.weight());
 		}
     }
 
@@ -87,33 +86,62 @@ public class DictionaryWeightedGraph<V, W extends Comparable<? super W>> impleme
 
     public void addVertex(V v) {
 
-    	// COMPLETAR
-
+        if(!graph.isDefinedAt(v)){
+            graph.insert(v, new HashDictionary<>());
+        }
     }
+
 
     public void addEdge(V src, V dst, W w) {
 
-    	// COMPLETAR
+        if(!graph.isDefinedAt(src) || !graph.isDefinedAt(dst)){
+            throw new GraphException("Error, los vértices pertenecen al grafo.");
+        }
+
+        Dictionary<V, W> dsrc = graph.valueOf(src);
+        dsrc.insert(dst,w);
+        graph.insert(src, dsrc);
+
+        Dictionary<V,W> ddst = graph.valueOf(dst);
+        ddst.insert(src,w);
+        graph.insert(dst,ddst);
 
     }
 
     public Set<Tuple2<V, W>> successors(V v) {
 
-    	// COMPLETAR
+        if(!graph.isDefinedAt(v)){
+            throw new GraphException("El vértice no pertenece al grafo");
+        }
 
-        return null;
+    	Set<Tuple2<V,W>> suc = new HashSet<>();
+        Dictionary<V, W> vDictionary = graph.valueOf(v);
+
+        for(V src : vDictionary.keys()){
+            W weight = vDictionary.valueOf(src);
+            suc.insert(new Tuple2<>(src,weight));
+
+        }
+
+        return suc;
     }
 
 
     public Set<WeightedEdge<V, W>> edges() {
         
-    	// COMPLETAR
+    	Set<WeightedEdge<V, W>> s = new HashSet<>();
+
+        for(V src : graph.keys()){
+            Dictionary<V,W> dic = graph.valueOf(src);
+
+            for(V dst : dic.keys()){
+                W weight = dic.valueOf(dst);
+                s.insert(new WE<>(src,dst,weight));
+            }
+        }
     	
-        return null;
+        return s;
     }
-
-
-
 
 
 
