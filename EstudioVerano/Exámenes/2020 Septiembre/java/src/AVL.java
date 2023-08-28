@@ -6,6 +6,7 @@
 
 import dataStructures.list.List;
 import dataStructures.list.LinkedList;
+import dataStructures.list.ListException;
 
 import java.util.Iterator;
 
@@ -15,18 +16,30 @@ class Bin {
     private List<Integer> weights; // weights of objects included in this bin
 
     public Bin(int initialCapacity) {
-        // todo
+        weights = new LinkedList<>();
+        remainingCapacity = initialCapacity;
     }
 
     // returns capacity left for this bin
     public int remainingCapacity() {
-        // todo
-        return 0;
+        int sum = 0;
+
+        for(Integer i : weights){
+            sum+=i;
+        }
+
+        return remainingCapacity - sum;
     }
 
     // adds a new object to this bin
     public void addObject(int weight) {
-        // todo
+        if(weight > remainingCapacity()){
+            throw new ListException("Error, el objeto no entra en el cubo.");
+        }
+
+        weights.append(weight);
+        remainingCapacity-=weight;
+
     }
 
     // returns an iterable through weights of objects included in this bin
@@ -59,29 +72,44 @@ public class AVL {
 
         // recomputes height of this node
         void setHeight() {
-            // todo
+            height = 1 + Math.max(left != null ? left.height : 0, right != null ? right.height : 0);
         }
 
         // recomputes max capacity among bins in tree rooted at this node
         void setMaxRemainingCapacity() {
-            // todo
+
+            maxRemainingCapacity = Math.max(bin.remainingCapacity(), Math.max(left != null ? left.maxRemainingCapacity : 0, right != null ? right.maxRemainingCapacity : 0));
+
         }
 
         // left-rotates this node. Returns root of resulting rotated tree
         Node rotateLeft() {
-            // todo
-            return null;
+
+            Node nuevo = this.right;
+            this.right = nuevo.left;
+            nuevo.left = this;
+
+            this.setHeight();
+            this.setMaxRemainingCapacity();
+            nuevo.setMaxRemainingCapacity();
+            nuevo.setHeight();
+
+            return nuevo;
         }
     }
 
     private static int height(Node node) {
-        // todo
-        return 0;
+
+        return node.height;
     }
 
     private static int maxRemainingCapacity(Node node) {
-        // todo
-        return 0;
+        int max = node.bin.remainingCapacity();
+
+        int leftMax = node.left != null ? node.left.maxRemainingCapacity : 0;
+        int rightMax = node.right != null ? node.right.maxRemainingCapacity : 0;
+
+        return Math.max(max, Math.max(leftMax, rightMax));
     }
 
     private Node root; // root of AVL tree
