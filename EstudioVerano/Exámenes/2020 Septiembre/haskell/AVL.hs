@@ -36,43 +36,71 @@ data AVL = Empty | Node Bin Int Capacity AVL AVL deriving Show
 
 
 emptyBin :: Capacity -> Bin
-emptyBin _ = undefined
+emptyBin x = B x []
 
 remainingCapacity :: Bin -> Capacity
-remainingCapacity _ = undefined
+remainingCapacity (B c w) = c - sum w
+
 
 addObject :: Weight -> Bin -> Bin
-addObject _ _ = undefined
+addObject o (B c []) = B (c - o) [o]
+addObject o (B c (x:xs))
+    | remainingCapacity (B c (o:x:xs)) < 0 = error "El objeto no cabe en el cubo"
+    | otherwise = B (c - o) (o:x:xs)
+
 
 maxRemainingCapacity :: AVL -> Capacity
-maxRemainingCapacity _ = undefined
+maxRemainingCapacity Empty = 0
+maxRemainingCapacity (Node _ _ maxCap leftChild rightChild) = max maxCap (max (maxRemainingCapacity leftChild) (maxRemainingCapacity rightChild))
+
 
 height :: AVL -> Int
-height _ = undefined
+height Empty = 0
+height (Node _ h _ _ _) = h
 
 
- 
 nodeWithHeight :: Bin -> Int -> AVL -> AVL -> AVL
-nodeWithHeight _ _ _ _ = undefined
+nodeWithHeight bin h leftChild rightChild =
+    let maxCap = max (remainingCapacity bin) (maxRemainingCapacity leftChild `max` maxRemainingCapacity rightChild)
+    in Node bin h maxCap leftChild rightChild
 
 
 node :: Bin -> AVL -> AVL -> AVL
-node _ _ _ = undefined
+node bin l r = nodeWithHeight bin altura l r
+    where
+      altura = 1 + max (height l) (height r)
+
 
 rotateLeft :: Bin -> AVL -> AVL -> AVL
-rotateLeft _ _ _ = undefined
+rotateLeft c l (Node r _ _ r1 r2) = node r (node c l r1) r2
+
 
 addNewBin :: Bin -> AVL -> AVL
-addNewBin _ _ = undefined
+addNewBin b Empty = Node b 1 (remainingCapacity b) Empty Empty
+addNewBin b (Node bn h c lt Empty) = node bn lt (Node b 1 (remainingCapacity b) Empty Empty)
+addNewBin b (Node bn h c Empty rt) = rotateLeft bn Empty (addNewBin b rt)
+addNewBin b (Node bn h c lt rt) = node bn lt (addNewBin b rt)
  
+
 addFirst :: Capacity -> Weight -> AVL -> AVL
-addFirst _ _ _ = undefined
+addFirst c w Empty = addNewBin (B (c - w) [w]) Empty
+addFirst c w t@(Node bn hn cn lt rt)
+        | maxRemainingCapacity t < w = addNewBin (B (c - w) [w]) t
+        | maxRemainingCapacity lt >= w = addFirst c w lt
+        | remainingCapacity bn >= w = node (addObject w bn) lt rt
+        | otherwise = addFirst c w rt
+
 
 addAll:: Capacity -> [Weight] -> AVL
-addAll _ _ = undefined
+addAll c ws = aux c ws Empty
+  where
+    aux c [] t = t
+    aux c (w : ws) t = aux c ws (addFirst c w t)
+
 
 toList :: AVL -> [Bin]
-toList _ = undefined
+toList Empty = []
+toList (Node b h c l r) = toList l ++ [b] ++ toList r
 
 {-
 	SOLO PARA ALUMNOS SIN EVALUACION CONTINUA
