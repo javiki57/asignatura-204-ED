@@ -100,7 +100,7 @@ public class AVL {
 
     private static int height(Node node) {
 
-        return node.height;
+        return node != null ? node.height : 0;
     }
 
     private static int maxRemainingCapacity(Node node) {
@@ -120,23 +120,83 @@ public class AVL {
 
     // adds a new bin at the end of right spine.
     private void addNewBin(Bin bin) {
-        // todo
+       root = addnewbin(root,bin);
+    }
+
+    private Node addnewbin(Node root, Bin bin){
+        if(root == null){
+            Node n = new Node();
+            n.bin = bin;
+            n.setHeight();
+            n.setMaxRemainingCapacity();
+            return n;
+        }
+
+        if(bin.remainingCapacity() > maxRemainingCapacity(root)){
+            root.right = addnewbin(root.right, bin);
+
+            if(height(root.right) - height(root.left) > 1){
+                if(bin.remainingCapacity() > maxRemainingCapacity(root.right)){
+                    root = root.rotateLeft();
+                }
+            }
+
+        }else{
+            root.left = addnewbin(root.left, bin);
+        }
+
+        root.setHeight();
+        root.setMaxRemainingCapacity();
+
+        return root;
+
     }
 
     // adds an object to first suitable bin. Adds
     // a new bin if object cannot be inserted in any existing bin
     public void addFirst(int initialCapacity, int weight) {
-        // todo
+        Bin nbin = new Bin(initialCapacity);
+        nbin.addObject(weight);
+
+        if(root == null || weight > maxRemainingCapacity(root)){
+            addNewBin(nbin);
+        }else if(root.left != null && root.left.maxRemainingCapacity >= weight){
+            root.left.bin.addObject(weight);
+            root.left.setHeight();
+            root.left.setMaxRemainingCapacity();
+        } else if (root.bin.remainingCapacity() >= weight) {
+            root.bin.addObject(weight);
+            root.setHeight();
+            root.setMaxRemainingCapacity();
+        } else {
+            root.right.bin.addObject(weight);
+            root.right.setHeight();
+            root.right.setMaxRemainingCapacity();
+        }
     }
 
     public void addAll(int initialCapacity, int[] weights) {
-        // todo
+        for(int weight : weights){
+            addFirst(initialCapacity,weight);
+        }
     }
 
     public List<Bin> toList() {
-        // todo
-        return null;
+        List<Bin> binList = new LinkedList<>();
+        toListRecursive(root, binList);
+        return binList;
     }
+
+    private void toListRecursive(Node node, List<Bin> binList) {
+        if (node == null) {
+            return;
+        }
+
+        toListRecursive(node.left, binList);
+        binList.append(node.bin);
+        toListRecursive(node.right, binList);
+    }
+
 
     public String toString() {
         String className = getClass().getSimpleName();
