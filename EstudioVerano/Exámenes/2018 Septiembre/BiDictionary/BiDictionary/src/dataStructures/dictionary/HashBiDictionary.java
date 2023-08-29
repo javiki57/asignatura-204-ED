@@ -35,17 +35,36 @@ public class HashBiDictionary<K,V> implements BiDictionary<K,V>{
 	public void insert(K k, V v) {
 
 		if(bKeys.isDefinedAt(k)){
-			
+			bKeys.delete(k);
+			bValues.delete(bKeys.valueOf(k));
+			insert(k,v);
+
+		}else if(bValues.isDefinedAt(v)){
+			bKeys.delete(bValues.valueOf(v));
+			bValues.delete(v);
+			insert(k,v);
+
+		}else{
+			bKeys.insert(k,v);
+			bValues.insert(v,k);
 		}
 	}
 	
 	public V valueOf(K k) {
-		// TODO
+
+		if(bKeys.isDefinedAt(k)){
+			return bKeys.valueOf(k);
+		}
+
 		return null;
 	}
 	
 	public K keyOf(V v) {
-		// TODO
+
+		if(bValues.isDefinedAt(v)){
+			return bValues.valueOf(v);
+		}
+
 		return null;
 	}
 	
@@ -58,11 +77,19 @@ public class HashBiDictionary<K,V> implements BiDictionary<K,V>{
 	}
 	
 	public void deleteByKey(K k) {
-		// TODO
+
+		if(isDefinedKeyAt(k)){
+			bValues.delete(bKeys.valueOf(k));
+			bKeys.delete(k);
+		}
 	}
 	
 	public void deleteByValue(V v) {
-		// TODO
+
+		if(isDefinedValueAt(v)){
+			bKeys.delete(bValues.valueOf(v));
+			bValues.delete(v);
+		}
 	}
 	
 	public Iterable<K> keys() {
@@ -79,8 +106,20 @@ public class HashBiDictionary<K,V> implements BiDictionary<K,V>{
 	
 		
 	public static <K,V extends Comparable<? super V>> BiDictionary<K, V> toBiDictionary(Dictionary<K,V> dict) {
-		// TODO
+
+		if(!esInyectivo(dict)){
+			throw new IllegalArgumentException("El diccionario no es inyectivo.");
+		}
+
+		//TODO
+
 		return null;
+	}
+
+	private static <K,V extends Comparable<? super V>> boolean esInyectivo(Dictionary<K, V> dict){
+		//TODO
+
+		return true;
 	}
 	
 	public <W> BiDictionary<K, W> compose(BiDictionary<V,W> bdic) {
