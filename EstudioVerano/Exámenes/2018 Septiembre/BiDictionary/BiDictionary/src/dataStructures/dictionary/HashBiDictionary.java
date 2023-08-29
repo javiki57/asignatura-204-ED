@@ -18,21 +18,25 @@ public class HashBiDictionary<K,V> implements BiDictionary<K,V>{
 	private Dictionary<V,K> bValues;
 	
 	public HashBiDictionary() {
-		// TODO 
+		bKeys = new HashDictionary<>();
+		bValues = new HashDictionary<>();
 	}
 	
 	public boolean isEmpty() {
-		// TODO
-		return false;
+
+		return bKeys.isEmpty() && bValues.isEmpty();
 	}
 	
 	public int size() {
-		// TODO
-		return 0;
+
+		return bKeys.size();
 	}
 	
 	public void insert(K k, V v) {
-		// TODO
+
+		if(bKeys.isDefinedAt(k)){
+			
+		}
 	}
 	
 	public V valueOf(K k) {

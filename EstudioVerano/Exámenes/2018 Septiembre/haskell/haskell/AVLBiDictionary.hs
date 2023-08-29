@@ -48,7 +48,10 @@ size (Bi dk dv) = D.size dk
 -- | Exercise b. insert
 
 insert :: (Ord a, Ord b) => a -> b -> BiDictionary a b -> BiDictionary a b
-insert k v (Bi dk dv) = Bi (D.insert k v dk) (D.insert v k dv)
+insert k v (Bi dk dv)
+      | D.isDefinedAt k dk = insert k v (Bi (D.delete k dk) (D.delete (fromJust (D.valueOf k dk)) dv))
+      | D.isDefinedAt v dv = insert k v (Bi (D.delete (fromJust (D.valueOf v dv)) dk) (D.delete v dv))
+      | otherwise = Bi (D.insert k v dk) (D.insert v k dv)
 
 -- | Exercise c. valueOf
 
