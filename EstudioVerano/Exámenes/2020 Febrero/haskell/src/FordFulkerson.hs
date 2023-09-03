@@ -14,13 +14,28 @@ import DataStructures.Graph.WeightedDiGraph
 import DataStructures.Graph.WeightedDiGraphBFT
 
 maxFlowPath :: Path (WDiEdge a Integer) -> Integer
-maxFlowPath = undefined
+maxFlowPath [] = error "El camino está vacío."
+maxFlowPath path = minimum [w | E _ w _ <- path]
 
 updateEdge ::(Eq a) => a -> a -> Integer -> [WDiEdge a Integer] -> [WDiEdge a Integer]
-updateEdge = undefined
+updateEdge x y p [] = [E x p y]
+updateEdge x y p (h:hs)
+        | (x,y) == getOrigDest h = (updateWeight p h) ++ hs
+        | otherwise              = h : (updateEdge x y p hs)
+
+getOrigDest :: WDiEdge a Integer -> (a,a)
+getOrigDest (E x p y) = (x,y)
+
+updateWeight :: Integer -> WDiEdge a Integer -> [WDiEdge a Integer]
+updateWeight p (E x w y)
+    | p + w == 0 = []
+    | otherwise = [E x (w + p) y]
 
 updateEdges :: (Eq a) => Path (WDiEdge a Integer) -> Integer -> [WDiEdge a Integer] -> [WDiEdge a Integer]
-updateEdges = undefined
+updateEdges [] _ edges = edges
+updateEdges (p:ps) w edges = updateEdges ps w (updateEdge x y w edges)
+    where
+        (x,y) = getOrigDest p
 
 addFlow :: (Eq a) => a -> a -> Integer -> [WDiEdge a Integer] -> [WDiEdge a Integer]
 addFlow = undefined
