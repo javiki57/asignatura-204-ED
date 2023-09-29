@@ -50,6 +50,22 @@ addTokenV4 lista t@(x,y)
         | isValidChain (lista ++ [t])  = lista ++ [t]
         | isValidChain (lista ++ [rt]) = lista ++ [rt]
         | otherwise                    = lista
-        
+
     where
         rt = (y,x)
+
+-- Dada una lista de fichas gira todas las piezas
+turnTokens :: [Token] -> [Token]
+turnTokens lista = map (\(x,y) -> (y,x)) lista
+
+
+-- Devuelve una lista con las fichas que satisfacen que la suma de sus 2 componentes es menor al segundo argumento
+takeTokens :: [Token] -> Int -> [Token]
+takeTokens lista s = filter (\(x,y) -> (x+y) < s) lista
+
+
+--Implementa las siguientes funciones utilizando listas por compresión
+
+-- Generar una lista con todas las fichas validas no repetidas
+allTokens :: [(Integer, Integer)]
+allTokens = [ (x,y) | x <- [0..6], y <- [x..6] ]
