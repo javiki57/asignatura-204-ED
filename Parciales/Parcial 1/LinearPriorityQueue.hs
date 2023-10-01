@@ -65,7 +65,9 @@ dequeue (Node x q) = q
 mkPQ :: (Ord a) => [a] -> PQueue a
 mkPQ xs = foldr (enqueue) empty xs
 
-
+mkPQr :: (Ord a) => [a] -> PQueue a
+mkPQr [] = Empty
+mkPQr (x:xs) = enqueue x (mkPQr xs)
 
 -- mapPQ. Transforma una cola de prioridad en otra aplicando la
 -- funcion dada a cada elemento.
@@ -99,8 +101,8 @@ foldrPQ f z (Node x restoCola) = f x (foldrPQ f z restoCola)
 fromPQ :: Ord a => a -> PQueue a -> PQueue a
 fromPQ x Empty = Empty
 fromPQ x (Node y q)
-          | x >= y    = Node y q
-          | otherwise = fromPQ x q
+          | x > y     = fromPQ x q
+          | otherwise = Node y q
 
 -- toPQ. Devuelve una cola hasta los elementos menores que uno dado.
 -- No es buena solución hacerlo usando filterPQ
@@ -119,7 +121,7 @@ listToPQ (xs) = foldr (enqueue) empty xs
 -- Es buena solución hacerlo con un plegado
 -- 1.00 (1.00 con plegado. 0.75 en otro caso)
 toList :: Ord a => PQueue a -> [a]
-toList t@(Node x q) = foldrPQ (:) [] t
+toList t = foldrPQ (:) [] t
 
 --toList = foldrPQ (\e )
 
