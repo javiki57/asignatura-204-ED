@@ -40,8 +40,7 @@ public class SortedArrayBag<T extends Comparable<? super T>> implements Bag<T> {
 	private void ensureCapacity() {
 		if (nextFree == value.length) {
 			value = Arrays.copyOf(value, 2 * value.length);
-
-			// COMPLETAR
+			count = Arrays.copyOf(count, 2 * count.length);
 
 		}
 	}
@@ -96,7 +95,7 @@ public class SortedArrayBag<T extends Comparable<? super T>> implements Bag<T> {
 		int i = locate(item);
 		if (value[i] != null && value[i].equals(item)) {
 
-			// COMPLETAR
+			count[i]++;
 
 		} else {
 			ensureCapacity();
@@ -106,8 +105,9 @@ public class SortedArrayBag<T extends Comparable<? super T>> implements Bag<T> {
 				count[j] = count[j - 1];
 			}
 
-			// COMPLETAR
-
+			value[i] = item;
+			count[i] = 1;
+			nextFree++;
 		}
 	}
 
@@ -121,6 +121,7 @@ public class SortedArrayBag<T extends Comparable<? super T>> implements Bag<T> {
 		if (value[i] != null && value[i].equals(item)) {
 
 			// COMPLETAR
+			result = count[i];
 
 		}
 		return result;
@@ -136,7 +137,17 @@ public class SortedArrayBag<T extends Comparable<? super T>> implements Bag<T> {
 		int i = locate(item);
 
 		// COMPLETAR
-
+		if(value[i] != null && value[i].equals(item)) {
+			if (count[i] == 1){
+				for (int j = i; j < nextFree; j++) {
+					value[j] = value[j + 1];
+					count[j] = count[j + 1];
+				}
+				nextFree--;
+			}else{
+				count[i]--;
+			}
+		}
 	}
 
 	/**
@@ -152,6 +163,20 @@ public class SortedArrayBag<T extends Comparable<? super T>> implements Bag<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		return null;
+		return new Iterator<T>() {
+			private int i = 0;
+			@Override
+			public boolean hasNext() {
+				return false; //i < nextFree;
+			}
+
+			@Override
+			public T next() {
+				if(!hasNext()){
+					throw new RuntimeException("Error, no hay siguiente");
+				}
+				return null; //value[i+1];
+			}
+		};
 	}
 }

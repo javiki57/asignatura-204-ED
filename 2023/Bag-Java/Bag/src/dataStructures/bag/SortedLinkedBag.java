@@ -44,9 +44,7 @@ public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> 
 	 */
 	public boolean isEmpty() {
 
-		// COMPLETAR
-
-		return true;
+		return first == null;
 	}
 
 	/**
@@ -65,13 +63,13 @@ public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> 
 
 		if (current != null && current.elem.equals(item)) {
 
-			// COMPLETAR
+			current.count++;
 
 		} else if (previous == null) {
 			first = new Node<T>(item, 1, first);
 		} else {
 
-			// COMPLETAR
+			previous.next = new Node<>(item, 1,current);
 
 		}
 	}
@@ -90,7 +88,7 @@ public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> 
 
 		if (current != null && current.elem.equals(item)) {
 
-			// COMPLETAR
+			result = current.count;
 
 		}
 		return result;
@@ -106,7 +104,27 @@ public class SortedLinkedBag<T extends Comparable<? super T>> implements Bag<T> 
 		Node<T> previous = null;
 		Node<T> current = first;
 
-			// COMPLETAR
+		while(current != null && current.elem.compareTo(item) < 0){
+			previous = current;
+			current = current.next;
+		}
+
+		if (current != null && current.elem.equals(item)) {
+
+			if(occurrences(current.elem)>1){
+				current.count--;
+
+			}else{
+
+				if(previous == null){
+					first = current.next;
+
+				}else{
+					previous.next=current.next;
+				}
+
+			}
+		}
 
 	}
 

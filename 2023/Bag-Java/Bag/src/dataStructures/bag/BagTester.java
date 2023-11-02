@@ -10,8 +10,8 @@ public class BagTester {
 
 		// Seleccionar una de las dos implementaciones
 		Bag<Character> b = 
-				new SortedArrayBag<>();
-				//new SortedLinkedBag<>();
+				//new SortedArrayBag<>();
+				new SortedLinkedBag<>();
 
 		String cervantes =
 		 	  "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, "
@@ -81,10 +81,12 @@ public class BagTester {
 		System.out.println(b.isEmpty());
 		
 		System.out.println("Prueba del iterador Bag={ ");
-		for(Character c : b){
+	/*	for(Character c : b){
 			System.out.print(c+" ");
 		}
 		System.out.print("}\n");
+
+	 */
 	}
 
 	public static <T extends Comparable<? super T>> void removeAll(Bag<T> b, T c) {
