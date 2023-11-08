@@ -12,6 +12,7 @@ module DataStructures.Queue.LinearQueue
   , enqueue
   , first
   , dequeue
+  , enqueueFront
   ) where
 
 import Data.List(intercalate)
@@ -37,6 +38,12 @@ first (Node x q) =  x
 dequeue :: Queue a -> Queue a
 dequeue Empty      =  error "dequeue on empty queue"
 dequeue (Node x q) =  q
+
+
+enqueueFront :: a -> Queue a -> Queue a
+enqueueFront x Empty = Node x Empty
+enqueueFront x q = Node x q
+
 
 -- Showing a queue
 instance (Show a) => Show (Queue a) where

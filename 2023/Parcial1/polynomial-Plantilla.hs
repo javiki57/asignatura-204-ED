@@ -113,6 +113,9 @@ eval:: Integer -> Pol -> Integer
 eval n Nil = 0
 eval n (P g c p) = c * (n^g) + (eval n p)
 
+eval' :: Integer -> Pol -> Integer
+eval' n t@(P g c p) = foldPol (\g1 c1 s -> c1*(n^g1) + s) 0 t
+
 
 --Ejercicio 10 : Establece una propiedad quickCheck que compruebe que la suma de
 --dos polinomios p1 y p2 tiene el mismo grado que el polinomio de mayor grado
