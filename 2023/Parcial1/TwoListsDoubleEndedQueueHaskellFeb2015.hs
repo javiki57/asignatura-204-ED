@@ -28,24 +28,35 @@ data DEQue a = DEQ [a] [a]
 
 -- Complexity: O(1)
 empty :: DEQue a
-empty = undefined
+empty = DEQ [] []
 
 -- Complexity: O(1)
 isEmpty :: DEQue a -> Bool
-isEmpty =undefined
+isEmpty (DEQ [] []) = True
+isEmpty _     = False
 
 -- Complexity: O(1)
 addFirst :: a -> DEQue a -> DEQue a
-addFirst = undefined
+addFirst x (DEQ xs ys) = DEQ (x:xs) ys 
+
 -- Complexity:
 addLast :: a -> DEQue a -> DEQue a
-addLast = undefined
+addLast y (DEQ xs ys) = DEQ xs (y:ys)
+
 -- Complexity: O(1)
 first :: (Eq a) => DEQue a -> a
-first = undefined
+first (DEQ [] []) = error "Lista vacia"
+first (DEQ (x:xs) ys) = x
+first (DEQ _ (t:[])) = t
+first (DEQ _ (t:ts)) = first (DEQ [] ts)
+
+
 -- Complexity: O(1)
 last :: (Eq a) => DEQue a -> a
-last = undefined
+last (DEQ [] []) = error "Lista vacia"
+last (DEQ _ (y:ys)) = y
+last (DEQ (x:[]) _ ) = x
+last (DEQ (x:xs) _ ) = last (DEQ xs [])
 
 {-
 -- Complexity: O(n)
@@ -54,29 +65,26 @@ deleteFirst = undefined
 -}
 
 deleteFirst :: DEQue a -> DEQue a
-deleteFirst = undefined
--- Complexity: O(n)
+deleteFirst (DEQ [] [])     = empty
+deleteFirst (DEQ (x:xs) ys) = DEQ xs ys
+deleteFirst (DEQ [] (y:[])) = empty
+deleteFirst (DEQ [] ys)     = DEQ [] (reverse (tail (reverse ys)))
 
-{-
-deleteLast :: (Eq a) => DEQue a -> DEQue a
-deleteLast (DEQ xs ys)
-| not (ys == []) = (DEQ xs (tail ys))
-| otherwise = aux xs ys 1
-where
-aux (x:xs) ys n
-| n < div (length xs) 2 = aux xs (x:ys) (n+1)
-| otherwise
-= DEQ ys (reverse xs)
--}
+
+-- Complexity: O(n)
 deleteLast :: DEQue a -> DEQue a
-deleteLast = undefined
+deleteLast (DEQ [] [] )    = empty
+deleteLast (DEQ _ (y:[]))  = empty
+deleteLast (DEQ (x:[]) []) = empty
+deleteLast (DEQ xs [])     = DEQ (reverse (tail (reverse xs))) []
+deleteLast (DEQ xs (y:ys)) = DEQ xs ys
 
 
 instance (Show a) => Show (DEQue a) where
     show q = "TwoListsDoubleEndedQueue(" ++ intercalate "," [show x | x <- toList q] ++ ")"
 
 toList :: DEQue a -> [a]
-toList = undefined
+toList (DEQ xs ys) = xs ++ (reverse ys)
 
 
 instance (Eq a) => Eq (DEQue a) where

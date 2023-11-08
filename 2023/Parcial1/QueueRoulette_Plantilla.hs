@@ -47,19 +47,19 @@ sample1 = R (foldl (flip Q.enqueue) Q.empty [3,4,5,6,7,8,9,10,1,2]) 10
 -- Ejercicio 1 (0.05 ptos.)
 -- Crea una ruleta vacia
 empty :: Roulette a 
-empty = undefined
+empty = R (Q.empty) 0
 
 -- ===========================================================
 -- Ejercicio 2 (0.05 ptos.)
 -- Determina si una ruleta está vacia
 isEmpty :: Roulette a -> Bool
-isEmpty (R q size) = undefined
+isEmpty (R q size) = Q.isEmpty q && size == 0
 
 -- ===========================================================
 -- Ejercicio 3 (0.10 ptos.)
 -- devuelve el dato apuntado 
 sign  :: Roulette a ->  a
-sign r@(R q _) = undefined 
+sign (R q _) = Q.first q
  
 {-
 Prelude (QueueRoulette.hs)> sign sample1
@@ -71,9 +71,24 @@ Prelude (QueueRoulette.hs)> sign sample1
 -- turn n r      moverá (avanzará) el puntero de la ruleta r en sentido horario n posiciones
 -- turn (-n) r   moverá el puntero de la ruleta r en sentido antihorario n posiciones
 -- n puede ser cualquier número entero
-turn :: Integer ->  Roulette a ->  Roulette a
-turn n (R q size) = undefined
 
+turn :: Integer ->  Roulette a ->  Roulette a
+turn n r@(R q size)
+    | size == 0 || m == 0 = r
+    | otherwise = R (aux q m) size
+    where
+        m = mod n size
+        aux q 0 = q
+        aux q s | s > 0 = aux (Q.enqueue (Q.first q) (Q.dequeue q)) (s - 1)
+
+{-
+turn n (R q s) 
+        | n > 0 = turn (n-1) (R (Q.enqueue (Q.first q) (Q.dequeue q)) s)
+        | n < 0 = turn (n+s) (R (Q.enqueue (Q.first q) (Q.dequeue q)) s)
+        | otherwise = (R q s)
+-}
+
+--R LinearQueue(3,4,5,6,7,8,9,10,1,2) 10
 {-
 turn 12 sample1
 QueueRoulette:10(5,6,7,8,9,10,1,2,3,4)
@@ -85,7 +100,7 @@ QueueRoulette:10(1,2,3,4,5,6,7,8,9,10)
 -- elimina el elemento situado en la posición del puntero y coloca el puntero 
 -- en la siguiente posición en sentido horario 
 delete :: Roulette a ->  Roulette a
-delete r@(R q size) = undefined
+delete (R q s) = R (Q.dequeue q) (s-1)
 
 {-
 delete sample1
@@ -96,7 +111,7 @@ QueueRoulette:9(4,5,6,7,8,9,10,1,2)
 -- inserta el elemento en la posición del puntero y corre el resto en sentido horario
 -- El insertado pasa a ser el destacado
 insert :: a  ->  Roulette a ->  Roulette a
-insert y (R q size) = undefined
+insert n r@(R q s) =  turn (-1) $ R (Q.enqueue n q) (s+1)
 
 {-
 Prelude (QueueRoulette.hs)> insert 20 sample1
@@ -112,21 +127,32 @@ QueueRoulette:0()
 -- Ejercicio 7 (0.15 ptos.)
 -- genera una ruleta con los objetos de la lista situados en orden horario y con el puntero apuntando al primero
 listToRoulette :: [a] -> Roulette a
-listToRoulette xs = undefined
+listToRoulette xs = foldr (insert) empty xs
 
 -- ===========================================================
 -- Ejercicio 8 (0.15 ptos.)
 -- genera una lista con los elementos de una ruleta. El primero será el apuntado por el
 -- puntero y luego irán los elementos en sentido horario
 rouletteToList :: Roulette a -> [a]
-rouletteToList (R q n) = undefined
+rouletteToList xs = foldRoulette (:) [] xs
+{-rouletteToList (R q s) = aux q
+        where
+            aux c
+                | Q.isEmpty c = []
+                | otherwise   = Q.first c : aux (Q.dequeue c)
+-}
+
+foldRoulette :: (a -> b -> b) -> b -> Roulette a -> b
+foldRoulette f z (R q 0) = z
+foldRoulette f z (R q s) = f (Q.first q) (foldRoulette f z (R (Q.dequeue q) (s-1)))
 
 -- ===========================================================
 -- Ejercicio 9 (0.20 ptos.)
 -- mapRoulette toma una función de a->b y se la aplica a todos los elementos 
 -- de la ruleta quedando la ruleta en la misma posición
 mapRoulette :: (a -> b) -> Roulette a -> Roulette b
-mapRoulette f (R q size) = undefined
+mapRoulette f t@(R q s) = listToRoulette $ map f (rouletteToList t)
+
 
 -- ===========================================================
 -- Ejercicio 9 (0.10 ptos.)
@@ -134,7 +160,7 @@ mapRoulette f (R q size) = undefined
 -- y luego n a la izquierda produce la misma ruleta. Las ruletas son Arbitray por lo 
 -- que pueden aparecer como argumentos de una propiedad
 p1:: Integer -> Roulette Integer -> Bool
-p1 n r = undefined
+p1 = undefined
     
 -- =============================================================================
 -- ========================= NO TOCAR DE AQUÍ PARA ABAJO =======================

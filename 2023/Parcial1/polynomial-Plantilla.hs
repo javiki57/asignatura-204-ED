@@ -31,6 +31,7 @@ data Pol = Nil | P Grade Coefficient (Pol) deriving Show
 p1 = P 3 1 (P 2 2 (P 0 8 Nil))
 --p2 = x^5 + 8x
 p2 = P 5 2 (P 1 8 Nil)
+p3 = P 3 (-1) (P 2 2 (P 0 (-8) Nil))
 
 --Nil representa un polinomio sin terminos (vacio)
 
