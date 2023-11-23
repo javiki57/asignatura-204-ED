@@ -43,6 +43,6 @@ heightT (Node _ tt) = 1 + maximum [heightT t | t <- tt]
 
 -- Devuelve la lista de elementos en un nivel
 atLevel :: Int -> Tree a -> [a]
-atLevel n Empty= []
+atLevel n Empty= []     
 atLevel 0 (Node x tt) = [x]
 atLevel n t@(Node x tt) = concat [atLevel (n-1) th | th <- tt]
