@@ -179,7 +179,7 @@ insertl n (D (x:xs) ys ) = D (x:n:xs) ys
 -- devuelve una lista con los elementos del Dock en el orden en el que están (del primero al último)
 -- Implementar usando plegado de listas (0.20) otro metodo (0.10)
 
-dockToList :: Dock a ->[a]
+dockToList :: Dock a -> [a]
 dockToList (D xs ys) = [lista | lista <- ((reverse xs) ++ ys)  ]
 
 
