@@ -11,7 +11,11 @@ package dataStructures.set;
 import dataStructures.dictionary.AVLDictionary;
 import dataStructures.dictionary.Dictionary;
 import dataStructures.list.ArrayList;
+import dataStructures.list.LinkedList;
 import dataStructures.list.List;
+import dataStructures.tuple.Tuple2;
+
+import java.util.Objects;
 
 public class DisjointSetDictionary<T extends Comparable<? super T>> implements DisjointSet<T> {
 
@@ -21,7 +25,8 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      * Inicializa las estructuras necesarias.
      */
     public DisjointSetDictionary() {
-        // TODO
+        dic = new AVLDictionary<>();
+
     }
 
     /**
@@ -29,8 +34,8 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      */
     @Override
     public boolean isEmpty() {
-        // TODO
-        return false;
+
+        return dic == null;
     }
 
     /**
@@ -38,8 +43,8 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      */
     @Override
     public boolean isElem(T elem) {
-        // TODO
-        return false;
+
+        return dic.isDefinedAt(elem);
     }
 
     /**
@@ -48,8 +53,7 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
 
     @Override
     public int numElements() {
-        // TODO
-        return 0;
+        return dic.size();
     }
 
     /**
@@ -59,7 +63,10 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      */
     @Override
     public void add(T elem) {
-        // TODO
+
+        if(!isElem(elem)){
+            dic.insert(elem, elem);
+        }
     }
 
     /**
@@ -68,8 +75,20 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      * devuelve {@code null}.
      */
     private T root(T elem) {
-        // TODO
-        return null;
+
+        if(isElem(elem)){
+            T k = dic.valueOf(elem);
+
+            if(k != elem){
+                root(k);
+            }
+            return k;
+
+        }else{
+
+            return null;
+        }
+
     }
 
     /**
@@ -77,8 +96,8 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      * de la clase de equivalencia a la que pertenece.
      */
     private boolean isRoot(T elem) {
-        // TODO
-        return false;
+
+        return dic.valueOf(elem).equals(elem);
     }
 
     /**
@@ -87,8 +106,9 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      */
     @Override
     public boolean areConnected(T elem1, T elem2) {
-        // TODO
-        return false;
+
+        return isElem(elem1) && isElem(elem2) && root(elem1) == root(elem2);
+
     }
 
     /**
@@ -98,8 +118,20 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      */
     @Override
     public List<T> kind(T elem) {
-        // TODO
-        return null;
+
+        List<T> lista = new LinkedList<>();
+
+        if(isElem(elem)){
+            T can = root(elem);
+
+            for(T k : dic.keys()){
+                if(root(k).equals(can)){
+                    lista.append(k);
+                }
+            }
+        }
+
+        return lista;
     }
 
     /**
@@ -109,7 +141,26 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
      */
     @Override
     public void union(T elem1, T elem2) {
-        // TODO
+
+        if(!isElem(elem1) || !isElem(elem2)){
+            throw new RuntimeException("No pertenecen a ninguna clase de equivalencia.");
+        }
+
+        T root1 = root(elem1);
+        T root2 = root(elem2);
+
+        if(root1 != null && root2 != null) {
+
+            if (root1.compareTo(root2) < 0) {
+                dic.delete(root1);
+                dic.insert(root2, root1);
+
+            } else if (root(elem1).compareTo(root(elem2)) > 0) {
+                dic.delete(root2);
+                dic.insert(root2, root1);
+
+            }
+        }
     }
 
     // ====================================================
