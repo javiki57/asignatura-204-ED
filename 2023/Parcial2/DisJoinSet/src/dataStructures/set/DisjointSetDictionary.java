@@ -152,11 +152,9 @@ public class DisjointSetDictionary<T extends Comparable<? super T>> implements D
         if(root1 != null && root2 != null) {
 
             if (root1.compareTo(root2) < 0) {
-                dic.delete(root1);
                 dic.insert(root2, root1);
 
             } else if (root(elem1).compareTo(root(elem2)) > 0) {
-                dic.delete(root2);
                 dic.insert(root2, root1);
 
             }
