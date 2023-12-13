@@ -1,0 +1,17 @@
+digraph tree2_DecoratedWith_2 {
+node [fontname="Arial", fontcolor=red, shape=circle, style=filled, color="#66B268", fillcolor="#AFF4AF" ];
+edge [color = "#0070BF"];
+1469821799 [label="8"];
+1469821799 -> 501263526;
+501263526 [label="27"];
+l501263526 [style=invis];
+501263526 -> l501263526;
+501263526 -> 626202354;
+626202354 [label="3"];
+1469821799 -> 1099983479;
+1099983479 [label="15"];
+1099983479 -> 1268447657;
+1268447657 [label="21"];
+1099983479 -> 1401420256;
+1401420256 [label="6"];
+}
