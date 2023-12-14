@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4c3819a-da3b-4dab-996c-092d7c825450" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../Huffman.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Huffman/Huffman/src/dataStructures/huffman/Huffman.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Huffman/Huffman/src/dataStructures/huffman/Huffman.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Huffman/Huffman/src/demos/huffman/HuffmanTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Huffman/Huffman/src/demos/huffman/HuffmanTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../2023/Practica7/src/src/dataStructures/vector/TreeVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../2023/Practica7/src/src/dataStructures/vector/TreeVector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Febrero 2018/DisjoinSet/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Febrero 2018/DisjoinSet/.idea/misc.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +24,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/jquir/OneDrive - Universidad de Málaga/Documentos/IT/ED/asignatura-204-ED/Parciales/Parcial 2/Febrero2017Sparce_Vector_Plantilla/SparseVectorsJava"
+    "last_opened_file_path": "C:/Users/jquir/OneDrive - Universidad de Málaga/Documentos/IT/ED/asignatura-204-ED/Parciales/Parcial 2/Febrero2017Sparce_Vector_Plantilla/SparseVectorsJava/SparseVectors/src",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -37,6 +37,7 @@
       <option name="presentableId" value="Default" />
       <updated>1670792914252</updated>
       <workItem from="1670792915398" duration="146000" />
+      <workItem from="1702555886296" duration="40000" />
     </task>
     <servers />
   </component>

@@ -6,6 +6,7 @@
 
 package dataStructures.vector;
 
+import dataStructures.list.LinkedList;
 import dataStructures.list.List;
 
 public class TreeVector<T> {
@@ -30,19 +31,20 @@ public class TreeVector<T> {
 
         @Override
         public E get(int i) {
-        	//to do
-            return null;
+
+            return value;
         }
 
         @Override
         public void set(int i, E x) {
-        	//to do
+        	this.value = x;
         }
 
         @Override
         public List<E> toList() {
-        	//to do
-            return null;
+        	List<E> lista = new LinkedList<E>();
+            lista.append(value);
+            return lista;
         }
     }
 
@@ -57,48 +59,90 @@ public class TreeVector<T> {
 
         @Override
         public E get(int i) {
-        	//to do
-            return null;
+
+            if( i % 2 == 0){
+                return left.get(i/2);
+
+            }else{
+                return right.get(i/2);
+            }
         }
+
 
         @Override
         public void set(int i, E x) {
-        	//to do
+            if( i % 2 == 0){
+                left.set(i/2,x);
+
+            }else{
+                right.set(i/2,x);
+            }
         }
 
         @Override
         public List<E> toList() {
-        	//to do
-            return null;
+
+            return intercalate(left.toList(), right.toList());
         }
     }
 
     public TreeVector(int n, T value) {
-    	//to do
+
+        if(n < 0){
+            throw new VectorException("Error, vector negativo.");
+        }
+
+        size = (int) Math.pow(2,n);
+        root = arbol(value, size);
+
+    }
+
+    private Tree<T> arbol(T value, int n){
+        if(n>0){
+            return  new Node<>(arbol(value, n-1),arbol(value, n-1));
+
+        }else{
+            return new Leaf<>(value);
+        }
     }
 
     public int size() {
-    	//to do
-        return 0;
+
+        return size;
     }
 
     public T get(int i) {
-    	//to do
-        return null;
+        if(i < 0 || i >= size){
+            throw new VectorException("Error, el parámetro i está fuera del rango");
+        }
+
+        return root.get(i);
     }
 
     public void set(int i, T x) {
-    	//to do
+    	if(i < 0 || i >= size){
+            throw new VectorException("Error, el parámetro i está fuera del rango");
+        }
+
+        root.set(i,x);
     }
 
     public List<T> toList() {
-    	//to do
-        return null;
+
+        return root.toList();
     }
 
     protected static <E> List<E> intercalate(List<E> xs, List<E> ys) {
-    	//to do
-        return null;
+        int i = 0;
+        List<E> lista = new LinkedList<>();
+
+        while(i<xs.size() || i<ys.size()){
+            lista.append(xs.get(i));
+            lista.append(ys.get(i));
+            i++;
+        }
+
+        return lista;
     }
 
     static protected boolean isPowerOfTwo(int n) {
