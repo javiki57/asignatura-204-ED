@@ -1,0 +1,17 @@
+digraph tree2_RotatedAt_8 {
+node [fontname="Arial", fontcolor=red, shape=circle, style=filled, color="#66B268", fillcolor="#AFF4AF" ];
+edge [color = "#0070BF"];
+1108411398 [label="15"];
+1108411398 -> 96639997;
+96639997 [label="8"];
+96639997 -> 128893786;
+128893786 [label="27"];
+l128893786 [style=invis];
+128893786 -> l128893786;
+128893786 -> 1732398722;
+1732398722 [label="3"];
+96639997 -> 1394438858;
+1394438858 [label="21"];
+1108411398 -> 584634336;
+584634336 [label="6"];
+}
