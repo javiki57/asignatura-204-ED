@@ -43,7 +43,8 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * Crea un SimpleSplayTree vacio.
      */
     public SimpleSplayTree() {
-        //TODO
+        root = null;
+        size = 0;
     }
 
     /**
@@ -52,8 +53,8 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @return true si el arbol está vacio
      */
     public boolean isEmpty() {
-        //TODO
-        return false;
+
+        return size == 0;
     }
 
     /**
@@ -62,8 +63,8 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @return numero de elementos almacenados en el arbol
      */
     public int size() {
-		//TODO
-        return 0;
+
+        return size;
     }
 
 
@@ -110,9 +111,28 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @param v el valor asociado a la clave
      */
     public void insert(K k, V v) {
-        //TODO
+        root = insertRec(root, k, v);
     }    
 
+    private Node<K,V> insertRec(Node<K, V> node, K k, V v){
+        if(node == null){
+            size++;
+            return new Node<>(k,v);
+        }
+
+        if(node.key.compareTo(k)==0){
+            node.value = v;
+
+        }else if(node.key.compareTo(k) < 0){
+            node.left = insertRec(node.left,k,v);
+            node=rotateRight(node);
+
+        }else{
+            node.right = insertRec(node.right,k,v);
+            node=rotateLeft(node);
+        }
+        return node;
+    }
     /**
      * (0,25 puntos)
      * Busca la clave k en el arbol.
@@ -125,11 +145,34 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @return el valor asociado a k o null si k no esta en el arbol
      */
     public V search(K k) {
-        //TODO
-    	return null;
+        Tuple2<Node<K,V>,V> tuple = searchRec(root,k);
+        root = tuple._1();
+    	return tuple._2();
     }
 
-    
+    private Tuple2<Node<K,V>,V> searchRec(Node<K,V> node, K k){
+        V v = null;
+        if(node == null){
+            return new Tuple2<>(node,v);
+        }
+
+        if(node.key.compareTo(k) == 0){
+            return new Tuple2<>(node,node.value);
+
+        }else if(node.key.compareTo(k) < 0){
+            Tuple2<Node<K,V>,V> t = searchRec(node.left,k);
+            node.left = t._1();
+            node = rotateRight(node);
+            v = t._2();
+        }else{
+            Tuple2<Node<K,V>,V> t = searchRec(node.right, k);
+            node.right = t._1();
+            node = rotateLeft(node);
+            v = t._2();
+        }
+
+        return new Tuple2<>(node,v);
+    }
 
     /**
      * (0,1 puntos)
