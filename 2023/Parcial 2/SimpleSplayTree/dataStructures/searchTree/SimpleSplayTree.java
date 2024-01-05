@@ -80,8 +80,15 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @return el nuevo nodo raiz
      */
     private static <K extends Comparable<? super K>, V> Node<K, V> rotateLeft(Node<K, V> node) {
-        //TODO
-        return null;
+        if(node != null && node.right != null){
+
+            Node<K,V> nodo = node.right;
+            node.right = nodo.left;
+            nodo.left = node;
+            return nodo;
+        }
+
+        return node;
     }
 
     /**
@@ -96,8 +103,16 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @return el nuevo nodo raiz
      */
     private static <K extends Comparable<? super K>, V> Node<K, V> rotateRight(Node<K, V> node) {
-        //TODO
-        return null;
+
+        if(node != null && node.left != null){
+
+            Node<K,V> nodo = node.left;
+            node.left = nodo.right;
+            nodo.right = node;
+
+            return nodo;
+        }
+        return node;
     }
 
     /**
@@ -123,13 +138,13 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
         if(node.key.compareTo(k)==0){
             node.value = v;
 
-        }else if(node.key.compareTo(k) < 0){
+        }else if(node.key.compareTo(k) > 0){
             node.left = insertRec(node.left,k,v);
-            node=rotateRight(node);
+            node = rotateRight(node);
 
         }else{
             node.right = insertRec(node.right,k,v);
-            node=rotateLeft(node);
+            node = rotateLeft(node);
         }
         return node;
     }
@@ -159,7 +174,7 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
         if(node.key.compareTo(k) == 0){
             return new Tuple2<>(node,node.value);
 
-        }else if(node.key.compareTo(k) < 0){
+        }else if(node.key.compareTo(k) > 0){
             Tuple2<Node<K,V>,V> t = searchRec(node.left,k);
             node.left = t._1();
             node = rotateRight(node);
@@ -184,9 +199,9 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @return true si k esta en el arbol
      */
     public boolean isElem(K k) {
-		//TODO
-        return false;
+        return search(k) != null;
     }
+
 
     /**
      * (0,25 puntos)
@@ -196,12 +211,28 @@ public class SimpleSplayTree<K extends Comparable<? super K>, V> implements Iter
      * @param node la raiz del arbol a recorrer en in-orden.
      * @return lista de tuplas de pares (k,v)
      */
+
     public static <K, V> List<Tuple2<K, V>> inOrderRec(Node<K, V> node) {
-        //TODO
-        return null;
+        List<Tuple2<K, V>> result = new ArrayList<>();
+        inOrderTraversal(node, result);
+        return result;
     }
 
-	/***** NO MODIFICAR *****/
+    private static <K, V> void inOrderTraversal(Node<K, V> node, List<Tuple2<K, V>> result) {
+        if (node != null) {
+            // Recorre el subárbol izquierdo
+            inOrderTraversal(node.left, result);
+
+            // Agrega el nodo actual a la lista
+            result.append(new Tuple2<>(node.key, node.value));
+
+            // Recorre el subárbol derecho
+            inOrderTraversal(node.right, result);
+        }
+    }
+
+
+    /***** NO MODIFICAR *****/
 	public List<Tuple2<K, V>> inOrder() {
         return inOrderRec(root);
     }
