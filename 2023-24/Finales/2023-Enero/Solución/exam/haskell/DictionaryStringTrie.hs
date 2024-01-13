@@ -36,38 +36,53 @@ empty = Empty
 
 -- | = Exercise b - isEmpty
 isEmpty :: Trie a -> Bool
-isEmpty (Node x sig) = isNothing x && D.isEmpty sig
+isEmpty Empty = True
+isEmpty _ = False
 
 -- | = Exercise c - sizeValue
 sizeValue :: Maybe a -> Int
-sizeValue a
-  | isNothing a = 0
-  | otherwise   = 1
+sizeValue tree = case tree of
+  Nothing -> 0
+  Just x  -> 1
 
 -- | = Exercise d - size
 size :: Trie a -> Int
-size = undefined
+size Empty = 0
+size (Node a dic) = sizeValue a + sum (map size (D.values dic))
+
 
 -- | = Exercise e - toTrie
 toTrie :: Maybe (Trie a) -> Trie a
-toTrie = undefined
+toTrie t = case t of
+  Nothing -> Empty
+  Just x  -> x
 
 -- | = Exercise f - childOf
 childOf :: Char -> Trie a -> Trie a
-childOf = undefined 
+childOf _ Empty = Empty
+childOf c (Node a dic)
+      | not(D.isDefinedAt c dic) = Empty
+      | otherwise                = toTrie (D.valueOf c dic)
 
 
 -- | = Exercise g - search
 search :: String -> Trie a -> Maybe a
-search = undefined
+search _ Empty         = Nothing
+search "" (Node a dic) = a 
+search (c:cs) t        = search cs (childOf c t) 
+
 
 -- | = Exercise h - update
 update :: Trie a -> Char -> Trie a -> Trie a
-update = undefined
+update Empty c child        = Node Nothing (D.insert c child D.empty)
+update (Node a dic) c child = Node a (D.insert c child dic) 
 
 -- | = Exercise i - insert
 insert :: String -> a -> Trie a -> Trie a
-insert = undefined
+insert "" v Empty              = Node (Just v) D.empty
+insert "" v (Node a dic)       = Node (Just v) dic
+insert (c:cs) v Empty          = insert cs v (childOf c Empty)
+insert (c:cs) v t@(Node a dic) = let child = insert cs v (childOf c t) in Node a (D.insert c child dic)
 
 -------------------------------------------------------------------------------
 -- ONLY FOR PART TIME STUDENTS ------------------------------------------------
@@ -75,7 +90,7 @@ insert = undefined
 
 -- | = Exercise e1 - strings
 strings :: Trie a -> [String]
-strings t = undefined
+strings = undefined
 
 -- | = Exercise e2 - fromList
 fromList :: [String] -> Trie Int
