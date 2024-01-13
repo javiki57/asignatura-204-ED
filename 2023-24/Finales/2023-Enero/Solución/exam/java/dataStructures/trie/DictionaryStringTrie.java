@@ -35,57 +35,103 @@ public class DictionaryStringTrie<V> {
 
   // | = Exercise a - constructor
   public DictionaryStringTrie() {
-    // TODO
+    root = null;
+
   }
 
   // | = Exercise b - isEmpty
   public boolean isEmpty() {
-    // TODO
-    return false;
+
+    return root == null;
   }
 
   // | = Exercise c - sizeValue
   protected static <V> int sizeValue(V value) {
-    // TODO
-    return 0;
+
+    return value == null ? 0 : 1;
   }
 
   // | = Exercise d - size
   public int size() {
-    // TODO
-    return 0;
+
+    return size(root);
   }
 
   protected static <V> int size(Node<V> node) {
-    // TODO
-    return 0;
+    if(node == null){
+        return 0;
+    }
+
+    int suma = sizeValue(node.value);
+
+    for(Node<V> v : node.children.values()){
+        suma += size(v);
+
+    }
+
+    return suma;
   }
+
 
   // | = Exercise e - childOf
   protected static <V> Node<V> childOf(char c, Node<V> node) {
-    // TODO
-    return null;
+
+      if(node == null || !node.children.isDefinedAt(c)){
+          return null;
+      }
+
+    return node.children.valueOf(c);
   }
 
   // | = Exercise f - search
   public V search(String str) {
-    // TODO
-    return null;
+
+    return search(str,root);
   }
 
   protected static <V> V search(String str, Node<V> node) {
-    // TODO
-    return null;
+
+      if(node == null){
+          return null;
+      }
+
+      if(str.isEmpty()){
+          return node.value;
+      }
+
+    return search(str.substring(1),childOf(str.charAt(0),node));
   }
 
   // | = Exercise g - insert
   public void insert(String str, V value) {
-    // TODO
+    root = insert(str,value,root);
   }
 
   protected static <V> Node<V> insert(String str, V value, Node<V> node) {
-    // TODO
-    return null;
+
+      if(node == null){
+          return null;
+      }
+
+      if(str.isEmpty()){
+
+          node.value = value;
+
+      }else{
+          Character c = str.charAt(0);
+          String suffix = str.substring(1);
+          Node<V> child = childOf(c,node);
+
+          if(child == null){
+              child = new Node<>();
+              node.children.insert(c,child);
+          }
+
+          Node<V> newChild = insert(suffix, value,child);
+          node.children.insert(c,newChild);
+      }
+
+    return node;
   }
 
   /*****************************************************************************
