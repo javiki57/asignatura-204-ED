@@ -28,7 +28,21 @@ rotateLeft t                       = t
 -- | = Exercise j - makeRoot
 
 makeRoot :: Ord a => a -> Tree a -> Tree a
-makeRoot = undefined
+makeRoot x t = case findAndRotate x t of
+                 Just rotatedTree -> rotatedTree
+                 Nothing          -> t
+
+findAndRotate :: Ord a => a -> Tree a -> Maybe (Tree a)
+findAndRotate x Empty = Nothing
+findAndRotate x (Node y l r)
+  | x == y    = Just (Node x l r)
+  | x < y     = case findAndRotate x l of
+                  Just rotatedLeft  -> Just (rotateRight (Node y rotatedLeft r))
+                  Nothing           -> Nothing
+  | otherwise = case findAndRotate x r of
+                  Just rotatedRight -> Just (rotateLeft (Node y l rotatedRight))
+                  Nothing           -> Nothing
+        
 
 -- DO NOT MODIFY CODE BELOW
 
