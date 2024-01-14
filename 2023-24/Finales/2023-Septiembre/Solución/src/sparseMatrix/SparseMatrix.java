@@ -146,9 +146,9 @@ public class SparseMatrix {
         if(list.size() % 3 != 0) throw new RuntimeException("Error, el tamaño de la lista no es correcto.");
 
         SparseMatrix m = new SparseMatrix(r,c);
-        for(int i=0; i<list.size()-3; i=i+3){
+        for(int i=0; i<list.size(); i+=3){
 
-            m.set(list.get(i),list.get(i+1), i+2);
+            m.set(list.get(i),list.get(i+1),list.get(i+2));
         }
 
         return m;
