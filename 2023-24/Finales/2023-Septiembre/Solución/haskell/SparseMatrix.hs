@@ -93,7 +93,7 @@ fromList f c ls
     | otherwise              = crear (sparseMatrix f c) ls
         where
             crear sm []         = sm
-            crear sm (x:y:z:xs) = crear (update sm (index sm x y) z) xs
+            crear sm (x:y:z:xs) = crear (set sm x y z) xs
 
 
 
