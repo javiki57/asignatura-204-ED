@@ -45,6 +45,7 @@ public class HashBiDictionary<K,V extends Comparable<? super V>> implements BiDi
 			bKeys.delete(bValues.valueOf(v));
 			bValues.delete(v);
 			insert(k,v);
+
 		}else{
 			bKeys.insert(k,v);
 			bValues.insert(v,k);
@@ -72,8 +73,8 @@ public class HashBiDictionary<K,V extends Comparable<? super V>> implements BiDi
 	public void deleteByKey(K k) {
 
 		if(isDefinedKeyAt(k)){
-			bKeys.delete(k);
 			bValues.delete(valueOf(k));
+			bKeys.delete(k);
 
 		}else{
 			throw new RuntimeException("Error");
@@ -107,10 +108,10 @@ public class HashBiDictionary<K,V extends Comparable<? super V>> implements BiDi
 	public static <K,V extends Comparable<? super V>> BiDictionary<K, V> toBiDictionary(Dictionary<K,V> dict) {
 
 		if(!inyectivo(dict)){
-			throw new RuntimeException("Error, el diccionario no es inyectivo.");
+			System.out.println("Error, el diccionario no es inyectivo.");
 		}
 
-		BiDictionary<K,V> b = new HashBiDictionary();
+		BiDictionary<K,V> b = new HashBiDictionary<>();
 		for(Tuple2<K,V> t : dict.keysValues()){
 			b.insert(t._1(),t._2());
 		}
