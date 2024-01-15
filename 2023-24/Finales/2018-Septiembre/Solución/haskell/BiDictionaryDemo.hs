@@ -35,7 +35,7 @@ True
 >>> B.isEmpty (B.insert 1 2 B.empty)
 False
 
->>> size empty
+>>> B.size B.empty
 0
 
 >>> B.size bd1

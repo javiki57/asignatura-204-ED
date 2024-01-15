@@ -36,53 +36,76 @@ data BiDictionary a b = Bi (D.Dictionary a b) (D.Dictionary b a)
 -- | Exercise a. empty, isEmpty, size
 
 empty :: (Ord a, Ord b) => BiDictionary a b
-empty = undefined
+empty = Bi (D.empty) (D.empty)
 
 isEmpty :: (Ord a, Ord b) => BiDictionary a b -> Bool
-isEmpty = undefined
+isEmpty (Bi dk dv)
+        | D.isEmpty dk && D.isEmpty dv = True
+        | otherwise                    = False
 
 size :: (Ord a, Ord b) => BiDictionary a b -> Int
-size = undefined
+size (Bi dk dv) = D.size dk
 
 -- | Exercise b. insert
 
 insert :: (Ord a, Ord b) => a -> b -> BiDictionary a b -> BiDictionary a b
-insert = undefined
+insert k v (Bi dk dv)
+      | D.isDefinedAt k dk = insert k v (Bi (D.delete k dk) (D.delete (fromJust (D.valueOf k dk)) dv))
+      | D.isDefinedAt v dv = insert k v (Bi (D.delete (fromJust (D.valueOf v dv)) dk) (D.delete v dv))
+      | otherwise          = Bi (D.insert k v dk) (D.insert v k dv)
+
 
 -- | Exercise c. valueOf
 
 valueOf :: (Ord a, Ord b) => a -> BiDictionary a b -> Maybe b
-valueOf = undefined
+valueOf k (Bi dk dv) = D.valueOf k dk
 
 -- | Exercise d. keyOf
 
 keyOf :: (Ord a, Ord b) => b -> BiDictionary a b -> Maybe a
-keyOf = undefined
+keyOf v (Bi dk dv) = D.valueOf v dv
 
 -- | Exercise e. deleteByKey
 
 deleteByKey :: (Ord a, Ord b) => a -> BiDictionary a b -> BiDictionary a b
-deleteByKey = undefined
+deleteByKey k (Bi dk dv)
+      | D.isDefinedAt k dk = Bi (D.delete k dk) (D.delete (fromJust (D.valueOf k dk)) dv)
+      | otherwise          = (Bi dk dv)
 
 -- | Exercise f. deleteByValue
 
 deleteByValue :: (Ord a, Ord b) => b -> BiDictionary a b -> BiDictionary a b
-deleteByValue = undefined
+deleteByValue v (Bi dk dv)
+        | D.isDefinedAt v dv = Bi (D.delete (fromJust (D.valueOf v dv)) dk) (D.delete v dv)
+        | otherwise          = (Bi dk dv)
 
 -- | Exercise g. toBiDictionary
 
 toBiDictionary :: (Ord a, Ord b) => D.Dictionary a b -> BiDictionary a b
-toBiDictionary = undefined
+toBiDictionary dic
+      | inyectivo dic = Bi dic (foldr (\(k,v) -> D.insert v k) D.empty (D.keysValues dic))
+      | otherwise                    = error "No es inyectivo"
+        where
+          inyectivo dic = length (nub (D.keys dic)) == length (nub (D.values dic))
+
 
 -- | Exercise h. compose
 
 compose :: (Ord a, Ord b, Ord c) => BiDictionary a b -> BiDictionary b c -> BiDictionary a c
-compose = undefined
+compose (Bi dk1 dv1) (Bi dk2 dv2) = aux (D.keys dv1) (D.keys dk2) empty
+    where
+      aux [] (y:ys) b = b
+      aux (x:xs) ys b
+            | elem x ys = aux xs ys (insert k v b)
+            | otherwise = aux xs ys b
+              where
+                k = fromJust (D.valueOf x dv1)
+                v = fromJust (D.valueOf x dk2)
 
 -- | Exercise i. isPermutation
 
 isPermutation :: Ord a => BiDictionary a a -> Bool
-isPermutation = undefined
+isPermutation (Bi dk dv) = (D.keys dk) == (D.keys dv)
 
 
 
