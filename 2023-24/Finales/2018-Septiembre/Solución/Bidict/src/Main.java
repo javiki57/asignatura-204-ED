@@ -45,7 +45,7 @@ public class Main {
         for (int i=0; i < palabras.length; i++) {
             dict.insert(palabras[i], numeros[i]);
         }
-        BiDictionary<String, Integer> bdictTest = HashBiDictionary.toBDictionary(dict);
+        BiDictionary<String, Integer> bdictTest = HashBiDictionary.toBiDictionary(dict);
         System.out.println("A partir de " + dict + " se genera " + bdictTest);
         System.out.println();
         
@@ -53,7 +53,7 @@ public class Main {
         dict.insert("threeduplicate", 3);
         try {
         	@SuppressWarnings("unused")
-			BiDictionary<String, Integer> bdictTest2 = HashBiDictionary.toBDictionary(dict);
+			BiDictionary<String, Integer> bdictTest2 = HashBiDictionary.toBiDictionary(dict);
         }catch( IllegalArgumentException e) {
         	System.out.println("Debe entrar por aqui ya que el diccionario no es inyectivo");
         	System.out.println();
