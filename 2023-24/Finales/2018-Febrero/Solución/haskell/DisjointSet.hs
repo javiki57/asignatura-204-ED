@@ -93,8 +93,8 @@ union x y ds@(DS dic)
       | otherwise            = error "No pertenecen a ninguna clase de equivalencia"
         where
           aux x y (DS dic)
-            | (root x ds) <= (root y ds) = DS (D.insert y x dic)
-            | otherwise                 = DS (D.insert x y dic)
+            | (root x ds) <= (root y ds) = DS (D.insert (fromJust(root y ds)) (fromJust(root x ds)) dic)
+            | otherwise                  = DS (D.insert (fromJust(root x ds)) (fromJust(root y ds)) dic)
 -- |------------------------------------------------------------------------
 
 flatten :: Ord a => DisjointSet a -> DisjointSet a
