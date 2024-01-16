@@ -28,7 +28,7 @@ data DisjointSet a = DS (D.Dictionary a a)
 -- | Exercise 1. empty
 
 empty :: DisjointSet a
-empty = undefined
+empty = DS D.empty
 
 -- | Exercise 2.a isEmpty
 
