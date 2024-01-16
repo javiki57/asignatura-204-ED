@@ -33,48 +33,68 @@ empty = DS D.empty
 -- | Exercise 2.a isEmpty
 
 isEmpty :: DisjointSet a -> Bool
-isEmpty = undefined
+isEmpty (DS dic)
+      | D.isEmpty dic = True
+      | otherwise     = False
+
 
 -- | Exercise 2.b isElem
 
 isElem :: (Ord a) => a -> DisjointSet a -> Bool
-isElem = undefined
+isElem x (DS dic) = D.isDefinedAt x dic
 
 -- | Exercise 3. numElements
 
 numElements :: DisjointSet a -> Int
-numElements = undefined
+numElements (DS dic) = D.size dic
 
 -- | Exercise 4. add
 
 add :: Ord a => a -> DisjointSet a -> DisjointSet a
-add = undefined
+add x ds@(DS dic)
+      | isElem x ds = ds
+      | otherwise   = DS (D.insert x x dic)
 
 -- | Exercise 5. root
 
 root :: Ord a => a -> DisjointSet a -> Maybe a
-root = undefined
+root x ds@(DS dic)
+      | isElem x ds  && (D.valueOf x dic == (Just x)) = Just x
+      | isElem x ds                                   = root (fromJust(D.valueOf x dic)) ds
+      | otherwise                                     = Nothing
 
 -- | Exercise 6. isRoot
 
 isRoot :: Ord a => a -> DisjointSet a -> Bool
-isRoot = undefined
+isRoot x ds@(DS dic) = case root x ds of
+  Nothing -> False
+  Just a  -> x==a
 
 -- | Exercise 7. areConnected
 
 areConnected :: Ord a => a -> a -> DisjointSet a -> Bool
-areConnected = undefined
+areConnected x y ds@(DS dic) = isElem x ds && isElem y ds && root x ds == root y ds
 
 -- | Exercise 8. kind
 
 kind :: Ord a => a -> DisjointSet a -> [a]
-kind = undefined
+kind x ds@(DS dic) = aux x (D.keys dic) []
+    where
+      aux x [] path = path
+      aux x (y:ys) path
+          | areConnected x y ds = (x:path) ++ (aux x ys path)
+          | otherwise = aux x ys path
 
 -- | Exercise 9. union
 
 union :: Ord a => a -> a -> DisjointSet a -> DisjointSet a
-union = undefined
-
+union x y ds@(DS dic)
+      | isElem x ds && isElem y ds = aux x y ds
+      | otherwise            = error "No pertenecen a ninguna clase de equivalencia"
+        where
+          aux x y (DS dic)
+            | (root x ds) <= (root y ds) = DS (D.insert y x dic)
+            | otherwise                 = DS (D.insert x y dic)
 -- |------------------------------------------------------------------------
 
 flatten :: Ord a => DisjointSet a -> DisjointSet a
