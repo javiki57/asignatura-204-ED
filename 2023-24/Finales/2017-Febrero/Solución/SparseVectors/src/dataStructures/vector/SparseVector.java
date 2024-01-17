@@ -7,6 +7,7 @@
 package dataStructures.vector;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class SparseVector<T> implements Iterable<T> {
 
@@ -29,14 +30,29 @@ public class SparseVector<T> implements Iterable<T> {
 
         @Override
         public T get(int sz, int i) {
-            // TODO
-            return null;
+
+            return elem;
         }
 
         @Override
         public Tree<T> set(int sz, int i, T x) {
-            // TODO
-            return null;
+            if(elem.equals(x)){
+                return this;
+            }
+            if(sz == 1){
+                return new Unif<T>(x);
+
+            }else{
+                Node<T> nodo;
+                if(i<sz/2){
+                    nodo = new Node<>(set(sz/2,i-(sz/2),x), this);
+
+                }else{
+                    nodo = new Node<>(this, set(sz/2,i-(sz/2),x));
+                }
+                return nodo;
+            }
+
         }
 
         @Override
@@ -58,19 +74,31 @@ public class SparseVector<T> implements Iterable<T> {
 
         @Override
         public T get(int sz, int i) {
-            // TODO
-            return null;
+            if(i < sz/2){
+
+                return left.get(sz/2,i);
+            }else{
+
+                return right.get(sz/2, i-sz/2);
+            }
         }
 
         @Override
         public Tree<T> set(int sz, int i, T x) {
-            // TODO
-            return null;
+            if(i<sz/2){
+                left = left.set(sz/2,i,x);
+
+            }else{
+                right = right.set(sz/2,i-sz/2,x);
+
+            }
+            simplify();
+            return this;
         }
 
         protected Tree<T> simplify() {
-            // TODO
-            return null;
+            if(left instanceof Unif<?> && right instanceof Unif<?> && left.get(1,0) == right.get(0,1)) return (Unif<T>) left;
+            return this;
         }
 
         @Override
@@ -85,27 +113,47 @@ public class SparseVector<T> implements Iterable<T> {
     private Tree<T> root;
 
     public SparseVector(int n, T elem) {
-        // TODO
+
+        if(n < 0) throw new VectorException("Error, tamaño negativo");
+        size = (int) Math.pow(2,n);
+        root = new Unif<>(elem);
     }
 
     public int size() {
-        // TODO
-        return -1;
+
+        return size;
     }
 
     public T get(int i) {
-        // TODO
-        return null;
+        if(i < 0 || i > size-1) throw new VectorException("Indice incorrecto");
+        return root.get(size,i);
     }
 
     public void set(int i, T x) {
-        // TODO
+        if(i < 0 || i > size-1) throw new VectorException("Indice incorrecto");
+        root = root.set(size,i,x);
     }
 
     @Override
     public Iterator<T> iterator() {
-        // TODO
-        return null;
+
+        return new Iterator<T>() {
+            int current;
+            @Override
+            public boolean hasNext() {
+                return current < size;
+            }
+
+            @Override
+            public T next() {
+                if(!hasNext()){
+                    throw new NoSuchElementException();
+                }
+                T x = root.get(size,current);
+                current++;
+                return x;
+            }
+        };
     }
 
     @Override

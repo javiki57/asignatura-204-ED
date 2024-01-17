@@ -33,27 +33,40 @@ data Vector a = V Int (Tree a) deriving Show
 
 -------------------------------------------------------------------------------
 -- | Exercise a.
-
-vector = undefined
+vector :: Int -> a -> Vector a
+vector n x 
+      | n >= 0    = V (2^n) (Unif x)
+      | otherwise = error "Dimensiones de n no válidas."
 
 -------------------------------------------------------------------------------
 -- | Exercise b.
-
-size = undefined
+size :: Vector a -> Int
+size (V n _) = n
 
 -------------------------------------------------------------------------------
 -- | Exercise c.
-
-simplify = undefined
+simplify :: Eq a => Tree a -> Tree a -> Tree a
+simplify (Unif x) (Unif y)
+      | x == y    = Unif x
+      | otherwise = Node (Unif x) (Unif y)
+simplify t1 t2 = Node t1 t2
 
 -------------------------------------------------------------------------------
 -- | Exercise d.
+get :: Int -> Vector a -> a
+get x (V v t)
+    | (x < 0) || (x >= v) = error "Fuera de rango"
+    | otherwise           = aux x v t
+      where
+        aux x v (Unif a) = a
+        aux x v (Node l r)
+          | x < (div v 2) = aux x (div v 2) l
+          | otherwise     = aux (x - (div v 2)) (div v 2) r
 
-get = undefined
 
 -------------------------------------------------------------------------------
 -- | Exercise e.
-
+set :: (Eq a) => Int -> a -> Vector a -> Vector a
 set = undefined
 
 -------------------------------------------------------------------------------
