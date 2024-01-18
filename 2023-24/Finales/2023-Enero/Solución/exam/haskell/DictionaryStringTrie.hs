@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Student's name: CARLOS QUESADA CRUZ
+-- Student's name: --
 -- Student's group:
 -- Identity number (DNI if Spanish/passport if Erasmus):
 --
@@ -90,11 +90,18 @@ insert (c:cs) v t@(Node a dic) = let child = insert cs v (childOf c t) in Node a
 
 -- | = Exercise e1 - strings
 strings :: Trie a -> [String]
-strings = undefined
+strings Empty        = []
+strings (Node a dic) = case a of
+  Nothing -> cadena
+  Just _  -> "":cadena
+  where
+    cadena = [(c:res) | (c,child) <- D.keysValues dic, res <- strings child]
+
 
 -- | = Exercise e2 - fromList
 fromList :: [String] -> Trie Int
-fromList xs = undefined
+fromList = undefined
+
 
 -------------------------------------------------------------------------------
 -- DO NOT WRITE ANY CODE BELOW ------------------------------------------------
